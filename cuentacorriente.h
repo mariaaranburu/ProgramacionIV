@@ -5,8 +5,9 @@
 typedef struct {
     int numero;
     float saldo;
-    Cliente *clientes;
+    Cliente *cliente;
 } CuentaCorriente;
 
+void imprimirCuenta(CuentaCorriente *c);
 
 #endif

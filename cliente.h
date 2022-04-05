@@ -3,6 +3,7 @@
 
 typedef struct {
     char* nombre;
+    char* contrasenya;
     int edad;
 } Cliente;
 
