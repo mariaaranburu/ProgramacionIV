@@ -1,6 +1,9 @@
 #include <stdio.h>
 
 typedef struct {
-    int x;
-    int y;
+    char* nombre;
+    int edad;
+
 } Cliente;
+
+void imprimirCliente (Cliente *c);
