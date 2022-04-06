@@ -17,7 +17,9 @@ int main(void) {
     scanf("%s", contrasenya);
     
     //COMPROBACION DE INICIO DE SESION: FOR, IF
-    
+    for (int i=0; i<10; i++) {
+        printf("comer\n");
+    }
 
     //MENU
     int opcion;
