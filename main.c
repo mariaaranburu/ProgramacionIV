@@ -24,7 +24,7 @@ int main(void) {
     //MENU
     int opcion;
     char opcionChar;
-    int opcionCuenta
+    int opcionCuenta;
     while (opcionChar!='q') {
         imprimirMenu();
         scanf("%i", opcion);
