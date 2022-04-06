@@ -15,7 +15,7 @@ int main(void) {
     //clientes->nombre = (char*) malloc (MAX_CHAR*sizeof(char));
     clientes[0].nombre = "Maria";
     //clientes->contrasenya = (char*) malloc (MAX_CHAR*sizeof(char));
-    clientes[0].contrasenya = "hola";
+    clientes[0].contrasenya = "HOLA!";
     clientes[0].edad = 20;
     char str[10];
     //INICIAR SESIÓN
