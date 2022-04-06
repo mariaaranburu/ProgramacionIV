@@ -18,7 +18,7 @@ int main(void) {
     
     //COMPROBACION DE INICIO DE SESION: FOR, IF
     for (int i=0; i<10; i++) {
-        printf("comer\n");
+        printf("hola\n");
     }
 
     //MENU
