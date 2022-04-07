@@ -7,6 +7,6 @@ typedef struct{
     float prec_compra;
     char* empresa;
     int dni_cliente; 
-}
+} Accion;
 
 #endif
