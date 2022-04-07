@@ -12,9 +12,9 @@ void imprimirMenuCuenta(void);
 
 int main(void) {
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
-    //clientes->nombre = (char*) malloc (MAX_CHAR*sizeof(char));
+    clientes->nombre = (char*) malloc (MAX_CHAR*sizeof(char));
     clientes[0].nombre = "Maria";
-    //clientes->contrasenya = (char*) malloc (MAX_CHAR*sizeof(char));
+    clientes->contrasenya = (char*) malloc (MAX_CHAR*sizeof(char));
     clientes[0].contrasenya = "hola";
     clientes[0].edad = 20;
     char str[10];
@@ -35,16 +35,11 @@ int main(void) {
     printf("Has introducido: %s, %s\n", nombre, contrasenya);
     
     //COMPROBACION DE INICIO DE SESION: FOR, IF
-<<<<<<< HEAD
     int encontrado = -1;
     for (int i=0; i<MAX_CLIENTES; i++) {
         if (clientes[i].nombre == nombre && clientes[i].contrasenya == contrasenya) {
             encontrado = 1;
         }
-=======
-    for (int i=0; i<10; i++) {
-        printf("hola\n");
->>>>>>> 10293dcfb387ed9ef92bf0ebd95909d20453c03d
     }
     if (encontrado == -1) {
         printf("El usuario y la contrasenya no son correctos. Prueba otra vez.\n");
