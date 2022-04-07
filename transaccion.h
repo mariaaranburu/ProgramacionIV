@@ -5,7 +5,7 @@
 #define _TRANSACCION_H_
 
 typedef struct {
-    int codigo;
+    int num;
     float importe;
     char* descripcion;
     CuentaCorriente *origen;
