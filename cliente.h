@@ -7,7 +7,7 @@ typedef struct {
     int dni;
     char* nombre;
     Fecha fec_nac;
-    char sexo;
+    char* sexo;
     char* contrasenya;
 } Cliente;
 

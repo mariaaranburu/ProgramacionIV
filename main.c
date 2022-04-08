@@ -1,73 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cliente.h"
-#include "cuentacorriente.h"
-#include "transaccion.h"
+#include "menu.h"
 #define MAX_CLIENTES 10
 #define MAX_CHAR 30
 
-void iniciarSesion(void);
-void imprimirMenu(void);
-void imprimirMenuCuenta(void);
 
 int main(void) {
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
-    //clientes->nombre = (char*) malloc (MAX_CHAR*sizeof(char));
-    clientes[0].nombre = "Maria";
-    //clientes->contrasenya = (char*) malloc (MAX_CHAR*sizeof(char));
-    clientes[0].contrasenya = "HOLA!";
-    clientes[0].edad = 20;
-    char str[10];
-    //INICIAR SESIÓN
-    printf("      INICIO DE SESION\n");
-    printf("-----------------------------\n");
-    printf("Inserta tu nombre: \n");
-    char* nombre;
-    scanf("%s", nombre);
-    //*nombre=*str;
-    fflush(stdin);
-    printf("-----------------------------\n");
-    printf("Inserta tu contrasenya: \n");
-    char* contrasenya;
-    scanf("%s", contrasenya);
-    fflush(stdin);
-    //*contrasenya=*str;
-    printf("Has introducido: %s, %s\n", nombre, contrasenya);
-    
-    //COMPROBACION DE INICIO DE SESION: FOR, IF
-    for (int i=0; i<10; i++) {
-        printf("hola\n");
+    clientes[0].dni = 73511346;
+    clientes[0].contrasenya = "1234A";
+    int encontrado = iniciarSesion(clientes,MAX_CLIENTES);
+    if (encontrado == 0) {
+        printf("Estas dentro!\n");
+        char opcion = imprimirMenu();
+        switch (opcion)
+        {
+            case '1':
+                printf("Caso 1\n");
+                break;
+            case '2':
+                printf("Caso 2\n");
+                break;
+            case '3':
+                /* code */
+                printf("Caso 3\n");
+                break;
+            case '4':
+                /* code */
+                printf("Caso 4\n");
+                break;
+            case 'q':
+                /* code */
+                printf("Caso q\n");
+                break;
+        
+        } 
     }
-    if (encontrado == -1) {
-        printf("El usuario y la contrasenya no son correctos. Prueba otra vez.\n");
-    } else {
-        //MENU
-        int opcion;
-        char opcionChar;
-        int opcionCuenta;
-        while (opcionChar!='q') {
-            imprimirMenu();
-            scanf("%i", opcion);
-            scanf("%c", opcionChar);
-            if (opcion == 1) {
-                imprimirMenuCuenta();
-            }
-        }
+    else {
+    printf("Los datos introducidos no son correctos.");
     }
     return 0;
 }
 
-void imprimirMenu(void) {
-    printf("Elige una opcion: \n");
-    printf("1. Ver mi cuenta corriente\n");
-    printf("2. Ver mis tarjetas\n");
-    printf("3. Ver mis acciones\n");
-    printf("4. Ver mi perfil\n");
-    printf("'q' para salir\n");
-}
-
-void imprimirMenuCuenta(void) {
-    printf("Elige una opcion: \n");
-    printf("1.Ver historial de movimientos\n");
-    printf("2. Hacer una transferencia\n");
-}
