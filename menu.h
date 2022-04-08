@@ -4,6 +4,9 @@
 
 int iniciarSesion(Cliente* c,int max);
 char imprimirMenu(void);
-void imprimirMenuCuenta(void);
+void miCuentaCorriente(void);
+void misTarjetas(void);
+void misAcciones(void);
+void miPerfil(Cliente c);
 
 #endif

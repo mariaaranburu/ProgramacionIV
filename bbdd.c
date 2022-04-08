@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "sqlite3.h"
 #include "cliente.h"
-#include "fecha.h"
 #include <string.h>
 
 void cuantosClientes(sqlite3 *db){

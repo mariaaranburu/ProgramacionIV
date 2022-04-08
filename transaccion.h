@@ -8,9 +8,11 @@ typedef struct {
     int num;
     float importe;
     char* descripcion;
-    CuentaCorriente *origen;
-    CuentaCorriente *destino;
+    CuentaCorriente* origen;
+    CuentaCorriente* destino;
 } Transaccion;
+
+void imprimirTransaccion(Transaccion t);
 
 
 #endif

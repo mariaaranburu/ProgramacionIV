@@ -9,4 +9,6 @@ typedef struct {
     int num_cc;
 } Tarjeta;
 
+void imprimirTarjeta(Tarjeta t);
+
 #endif

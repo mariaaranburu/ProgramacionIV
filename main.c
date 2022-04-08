@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "cliente.h"
 #include "menu.h"
 #define MAX_CLIENTES 10
 #define MAX_CHAR 30
