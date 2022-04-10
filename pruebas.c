@@ -17,9 +17,11 @@ int main (void){
     int p;
     p = cuantosClientes(db);
     printf("lineas: %i\n",p);
-
+    printf("Hola");
     Cliente* c = (Cliente*)malloc(p*sizeof(Cliente));
-    cogerClientes(db,c);
+    printf("Hola");
+    c = cogerClientes(db);
+    printf("Hola");
     printf("DNI: %i",c[1].dni);
     
     //Cerrar base de datos
