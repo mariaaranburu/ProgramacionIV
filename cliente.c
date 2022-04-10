@@ -2,5 +2,5 @@
 #include "cliente.h"
 
 void imprimirCliente (Cliente *c) {
-    printf("[Nombre: %s, Edad: %i]", c->nombre, c->edad);
+    printf("[Nombre: %s, Edad: ]", c->nombre);
 }
