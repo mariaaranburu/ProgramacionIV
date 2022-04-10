@@ -6,14 +6,18 @@
 
 
 int main(void) {
+    CuentaCorriente cuenta;
+    Transaccion* transacciones;
+    int numTransacciones;
+    Tarjeta* tarjetas;
+    int numTarjetas;
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
     clientes[0].dni = 73511346;
     clientes[0].contrasenya = "1234A";
     int encontrado = iniciarSesion(clientes,MAX_CLIENTES);
     if (encontrado == 0) {
         printf("Estas dentro!\n");
-        imprimirMenu();
-        
+        imprimirMenu(cuenta,transacciones,numTransacciones,tarjetas,numTarjetas);
     }
     else {
     printf("Los datos introducidos no son correctos.");

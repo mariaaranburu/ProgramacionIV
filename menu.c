@@ -34,7 +34,7 @@ int iniciarSesion(Cliente* c,int max){
     return 1;
 }
 
-void imprimirMenu(void) {
+void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj) {
     char r;
     printf("Elige una opcion: \n");
     printf("1. Ver mi cuenta corriente\n");
@@ -48,10 +48,10 @@ void imprimirMenu(void) {
     switch (r)
         {
             case '1':
-                printf("Caso 1\n");
+                miCuentaCorriente(c,transacciones,numTrans);
                 break;
             case '2':
-                printf("Caso 2\n");
+                misTarjetas(tarjetas, numTarj);
                 break;
             case '3':
                 /* code */
@@ -69,7 +69,7 @@ void imprimirMenu(void) {
         } 
 }
 
-void miCuentaCorriente(void) {
+void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
     char r;
     printf("Elige una opcion: \n");
     printf("1.Consultar saldo\n");
@@ -80,14 +80,15 @@ void miCuentaCorriente(void) {
     switch (r)
     {
     case '1':
-        /* code */
+        consultarSaldo(c);
         break;
     case '2':
-
+        consultarHistoria(c, t,numT);
         break;
     case '3':
-
-        break:
+        //El caso 3 aún no está
+        printf("Aqui caso 3 -> Se tiene que hacer");
+        break;
     default:
         break;
     } 
@@ -95,6 +96,7 @@ void miCuentaCorriente(void) {
 
 //Opcion 1 de miCuentaCorriente
 void consultarSaldo(CuentaCorriente cuenta){
+    printf("------------------------------");
     printf("El saldo es: %f",cuenta.saldo);
 }
 
@@ -135,18 +137,35 @@ void consultarHistoria(CuentaCorriente cuenta, Transaccion* transacciones,int nu
     void accederASaldoCuentas(listaCuentas, numeroCuentas, miCuentaCorriente.numero, importe, 'r');
 }*/
 
-void misTarjetas(void){
+void misTarjetas(Tarjeta* t, int numTarjetas){
+    char r;
     printf("Elige una opcion: \n");
     printf("1. Administrar tarjetas\n");
     printf("2. Nueva tarjeta\n");
+    scanf("%c",&r);
+    fflush(stdin);
+    switch (r)
+    {
+    case '1':
+        todasMisTarjetas(t,numTarjetas);
+        break;
+    case '2':
+        introducirDatos();
+        break;
+    default:
+        break;
+    }
+
 }
 
 //Opcion 1 misTarjetas
-int todasMisTarjetas(Tarjeta* t, int numTarjetas){
+void todasMisTarjetas(Tarjeta* t, int numTarjetas){
     int tarjetaSeleccionada;
     imprimirNumTarjeta(t,numTarjetas);
     printf("Que tarjeta desea visualizar? (salir ->0)" );
     scanf("%i",tarjetaSeleccionada);
+    infoTarjeta(t[tarjetaSeleccionada]);
+    printf("\n");
 }
 
 //Ver la info de una tarjeta
