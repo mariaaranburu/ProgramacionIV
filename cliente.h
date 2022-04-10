@@ -9,6 +9,6 @@ typedef struct {
     char* contrasenya;
 } Cliente;
 
-void imprimirCliente (Cliente *c);
+void imprimirCliente (Cliente c);
 
 #endif
