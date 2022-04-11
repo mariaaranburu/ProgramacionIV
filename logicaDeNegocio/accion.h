@@ -1,5 +1,6 @@
 #ifndef _ACCION_H_
 #define _ACCION_H_
+#include "cliente.h"
 
 typedef struct{
     int num_valor;
