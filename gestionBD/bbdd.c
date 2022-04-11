@@ -299,7 +299,7 @@ int cuantosTitulares(sqlite3 *db){
 
 
 //Devuelve el numero de transacciones.
-int cuentasTransacciones(sqlite3 *db){
+int cuantasTransacciones(sqlite3 *db){
     sqlite3_stmt *stmt;
     char sql[] = "select count(*) from TRANSACCIONES";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
