@@ -76,10 +76,18 @@ Cliente* cogerClientes (sqlite3 *db){
 		result = sqlite3_step(stmt) ;
 		if (result == SQLITE_ROW) {
 			lista[contador].dni = sqlite3_column_int(stmt, 0);
-			strcpy(lista[contador].nombre, (char *) sqlite3_column_text(stmt, 1));
-            strcpy(lista[contador].fec_nac,(char*)sqlite3_column_text(stmt,2));
-            strcpy(lista[contador].sexo,(char *) sqlite3_column_text(stmt, 3));
-            strcpy(lista[contador].contrasenya,(char *) sqlite3_column_text(stmt, 4));
+            int tamNombre = strlen((char*)sqlite3_column_text(stmt,1));
+            lista[contador].nombre = (char*)malloc((tamNombre+1)*sizeof(char));
+			lista[contador].nombre = (lista[contador].nombre, (char *) sqlite3_column_text(stmt, 1));
+            int tamFecNac = strlen((char*)sqlite3_column_text(stmt,2));
+            lista[contador].fec_nac = (char*)malloc((tamFecNac+1)*sizeof(char));
+            lista[contador].fec_nac = strcpy(lista[contador].fec_nac,(char*)sqlite3_column_text(stmt,2));
+            int tamSexo = strlen((char*)sqlite3_column_text(stmt,3));
+            lista[contador].sexo = (char*)malloc((tamSexo+1)*sizeof(char));
+            lista[contador].sexo = strcpy(lista[contador].sexo,(char *) sqlite3_column_text(stmt, 3));
+            int tamContra = strlen((char*)sqlite3_column_text(stmt, 4));
+            lista[contador].contrasenya = (char*)malloc((tamContra+1)*sizeof(char));
+            lista[contador].contrasenya = strcpy(lista[contador].contrasenya,(char *) sqlite3_column_text(stmt, 4));
             contador++;
 		}
 	} while (result == SQLITE_ROW);
