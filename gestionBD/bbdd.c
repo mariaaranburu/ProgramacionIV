@@ -191,7 +191,7 @@ CuentaCorriente* cogerCuentas (sqlite3 *db,Cliente* clientes){
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW){
             lista[contador].numero = sqlite3_column_int(stmt, 0);
-            lista[contador].saldo = sqlite3_column_float(stmt, 1);
+            lista[contador].saldo = sqlite3_column_double(stmt, 1);
             lista[contador].cliente = (Cliente*)malloc(sizeof(Cliente));
             dni = sqlite3_column_int(stmt,2);
             lista[contador].cliente = buscarCliente(dni,clientes,numClientes);
@@ -347,7 +347,7 @@ Transaccion* listaTransacciones(sqlite3* db,CuentaCorriente* cuentas, int numCue
             lista[contador].importe = sqlite3_column_double(stmt,1);
             int tamDesc = strlen((char*)sqlite3_column_text(stmt,2));
             lista[contador].descripcion = (char*)malloc((tamDesc+1)*sizeof(char));
-            lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite_column_text(stmt,3));
+            lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite3_column_text(stmt,3));
             lista[contador].origen = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
             numOrigen = sqlite3_column_int(stmt,4);
             lista[contador].origen = buscar(numOrigen,cuentas,numCuentas);
@@ -412,8 +412,8 @@ Accion* cogerAccion (sqlite3 *db){
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW){
             lista[contador].num_valor = sqlite3_column_int(stmt, 0);
-            lista[contador].prec_actual = sqlite3_column_float(stmt, 1);
-            lista[contador].prec_compra = sqlite3_column_float(stmt, 2);
+            lista[contador].prec_actual = sqlite3_column_double(stmt, 1);
+            lista[contador].prec_compra = sqlite3_column_double(stmt, 2);
             int tamNomEmpresa = strlen((char*)sqlite3_column_text(stmt,3));
             lista[contador].empresa = (char*)malloc((tamNomEmpresa+1)*sizeof(char));
 			lista[contador].empresa = (lista[contador].empresa, (char *) sqlite3_column_text(stmt, 3));

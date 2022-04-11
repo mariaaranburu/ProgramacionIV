@@ -53,7 +53,6 @@ int main(void) {
         encontrado = iniciarSesion(clientes,MAX_CLIENTES);
     }
     printf("Estas dentro!\n");
-    escribirFicheroClientes(clientes, MAX_CLIENTES);
     imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numeroTarjetas, clientes[0]);
     return 0;
 }
