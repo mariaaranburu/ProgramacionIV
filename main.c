@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "menu.h"
+#include "transaccion.h"
 #define MAX_CLIENTES 10
 #define MAX_CHAR 30
 
 
 int main(void) {
-    CuentaCorriente cuenta = 
-    Transaccion* transacciones;
+    CuentaCorriente cuenta;
+    Transaccion *transacciones;
     int numTransacciones;
     Tarjeta* tarjetas;
     int numTarjetas;
