@@ -46,7 +46,7 @@ void leerFicheroClientes (Cliente * clientes, int* size){
         clientes[i].dni=b;
 		//clientes[i].setDni(b);
 		// sscanf(dni, "%i", &usuarios[i].setDni(dni));
-		limpiar(dni);
+		limpiar (dni);
 
 		c='a';
 

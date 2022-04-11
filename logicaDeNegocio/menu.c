@@ -2,7 +2,6 @@
 #include <string.h>
 #include "menu.h"
 
-
 #define TAM_MAX 20
 
 int iniciarSesion(Cliente* c,int max){
@@ -35,7 +34,7 @@ int iniciarSesion(Cliente* c,int max){
     return 1;
 }
 
-void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj, Cliente cli) {
+void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj) {
     char r;
     printf("Elige una opcion: \n");
     printf("1. Ver mi cuenta corriente\n");
@@ -43,7 +42,7 @@ void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Ta
     printf("3. Ver mis acciones\n");
     printf("4. Ver mi perfil\n");
     printf("'q' para salir\n");
-    printf("-----------------------\n");
+    printf("-----------------------------\n");
     printf("Que quieres hacer? \n");
     scanf("%c",&r);
     fflush(stdin);
@@ -61,7 +60,7 @@ void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Ta
                 break;
             case '4':
                 /* code */
-                miPerfil(cli);
+                printf("Caso 4\n");
                 break;
             case 'q':
                 /* code */
@@ -71,10 +70,10 @@ void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Ta
         } 
 }
 
-void miCuentaCorriente(CuentaCorriente* c, Transaccion* t, int numT) {
+void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
     char r;
     printf("Elige una opcion: \n");
-    printf("1. Consultar saldo\n");
+    printf("1.Consultar saldo\n");
     printf("2. Consultar historial\n");
     printf("3. Hacer transferencias\n");
     scanf("%c",&r);
@@ -89,7 +88,7 @@ void miCuentaCorriente(CuentaCorriente* c, Transaccion* t, int numT) {
         break;
     case '3':
         //El caso 3 aún no está
-        nuevaTransferencia()
+        printf("Aqui caso 3 -> Se tiene que hacer");
         break;
     default:
         break;
@@ -97,34 +96,24 @@ void miCuentaCorriente(CuentaCorriente* c, Transaccion* t, int numT) {
 }
 
 //Opcion 1 de miCuentaCorriente
-void consultarSaldo(CuentaCorriente* cuenta){
+void consultarSaldo(CuentaCorriente cuenta){
     printf("------------------------------");
-    printf("El saldo es: %2.f",cuenta->saldo);
+    printf("El saldo es: %2.f",cuenta.saldo);
 }
 
 //Opcion 2 de miCuentaCorriente
-void consultarHistoria(CuentaCorriente* cuenta, Transaccion* transacciones,int numTransacciones){
-    printf("\n");
-    printf("MI HISTORIAL:\n");
+void consultarHistoria(CuentaCorriente cuenta, Transaccion* transacciones,int numTransacciones){
     for(int i=0;i<numTransacciones;i++){
         int numDestino = transacciones[i].destino->numero;
         int numOrigen = transacciones[i].origen->numero;
-        if(cuenta->numero == (numDestino || numOrigen)){
+        if(cuenta.numero == numDestino || cuenta.numero == numOrigen){
             imprimirTransaccion(transacciones[i]);
         }
     }
 }
 
 //Opcion 3 de miCuentaCorriente
-void nuevaTransferencia (CuentaCorriente* miCuenta, Transaccion* transacciones) {
-    int num;
-    fflush(stdin);
-    float importe;
-    scanf("");
-    Transaccion* transaccion = {num, importe, descripcion, miCuenta, cuentaDestino};
-    transacciones[10]=&transaccion;
-}
-/*void nuevaTransferencia(CuentaCorriente miCuentaCorriente, CuentaCorriente* listaCuentas, int numeroCuentas){
+void nuevaTransferencia(CuentaCorriente miCuentaCorriente, CuentaCorriente* listaCuentas, int numeroCuentas){
     Transaccion nuevaTransaccion;
     int num;
     float importe;
@@ -140,14 +129,8 @@ void nuevaTransferencia (CuentaCorriente* miCuenta, Transaccion* transacciones) 
     printf("Descripcion: \n");
     scanf("%s", descripcion);
     fflush(stdin);
-    nuevaTransaccion.num = rand() %11 + 100000000;
-    nuevaTransaccion.origen = 
-    nuevaTransaccion.destino =
-    nuevaTransaccion.descripcion = descripcion;
-    nuevaTransaccion.importe = importe;
-    void accederASaldoCuentas(listaCuentas, numeroCuentas, numDestino, importe, 's');
-    void accederASaldoCuentas(listaCuentas, numeroCuentas, miCuentaCorriente.numero, importe, 'r');
-}*/
+    printf("Tu solicitud será gestionada en breves momentos por el Banco, muchas gracias.");
+}
 
 void misTarjetas(Tarjeta* t, int numTarjetas){
     char r;
@@ -264,9 +247,7 @@ Tarjeta introducirDatos(void){
     printf("Introduzca el numero de la cuenta corriente a la que pertenece: ");
     scanf("%i",&num_cc);
     fflush(stdin);
-    tarjeta.numCC = num_cc;
-    printf("\n");
-    return tarjeta;
+    printf("Tu solicitud será gestionada en los próximos días por el Banco, muchas gracias.");
 }
 
 void misAcciones(void){
@@ -309,20 +290,19 @@ void comprarNuevasAcciones(Accion* acciones, int dni_cliente, int numAcciones){
     printf("Que accion quiere comprar? ");
     scanf("%i",&accionAC);
     fflush(stdin);
-    //INSERTAR ACCION AL CLIENT
+    
 }
+
 
 //ver la informacion relacionada con el perfil
 void miPerfil(Cliente c){
     char r;
-    printf("ESTOS SON TUS DATOS: \n");
-    printf("-----------------------\n");
     printf("DNI: %i\n",c.dni);
     printf("Nombre: %s\n",c.nombre);
     printf("Fecha nacimiento: %s\n",c.fec_nac);
     printf("Sexo: %s\n",c.sexo);
     printf("Contrasenya: %s\n",c.contrasenya);
-    printf("Quieres modificar tus datos? (s/n) ");
+    printf("Modificar los datos (s/n) ");
     scanf("%c",&r);
     fflush(stdin);
     if(r == 's'){
