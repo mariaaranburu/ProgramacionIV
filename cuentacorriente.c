@@ -23,3 +23,14 @@ void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int
         cuentaSeleccionada.saldo = cuentaSeleccionada.saldo - modificacion;
     }
 }
+
+CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas){
+    int bueno;
+    for(int i=0; i<numCuentas;i++){
+        if(cuentas[i].numero == numCC){
+            bueno = i;
+            break;
+        }
+    }
+    return cuentas[bueno];
+}

@@ -31,6 +31,46 @@ int cuantasAcciones(sqlite3 *db){
     return numFilas;
 }
 
+//Saca la lista de acciones
+Accion* listaAcciones(sqlite3* db, Cliente* clientes){
+    sqlite3_stmt *stmt;
+    char sql[] = "select * from ACCION";
+    int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+    if (result != SQLITE_OK) {
+		printf("Error preparing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+
+    int numFilas = cuantasAcciones(db);
+    Accion* acciones = (Accion*)malloc(numFilas*sizeof(Accion));
+    Cliente* c = (Cliente*)malloc(sizeof(Cliente));
+    int numClientes = cuantosClientes(db);
+    int dni;
+    int contador = 0;
+
+    do {
+		result = sqlite3_step(stmt) ;
+		if (result == SQLITE_ROW) {
+			acciones[contador].num_valor = sqlite3_column_int(stmt,0);
+            acciones[contador].prec_actual = sqlite3_column_double(stmt,1);
+            acciones[contador].prec_compra = sqlite3_column_double(stmt,2);
+            int tamEmpresa = strlen((char*)sqlite3_column_text(stmt,3));
+            acciones[contador].empresa = (char*)malloc((tamEmpresa+1)*sizeof(char));
+            acciones[contador].empresa = strcpy(acciones[contador].empresa,(char*)sqlite3_column_text(stmt,3));
+            dni = sqlite3_column_int(stmt,4);
+            c = buscarCliente(dni,c,numClientes);
+            contador++;
+		}
+	} while (result == SQLITE_ROW);
+    
+    result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+    return acciones;
+}
+
 //Devuelve el numero de clientes.
 int cuantosClientes(sqlite3 *db){
     sqlite3_stmt *stmt;
@@ -129,6 +169,39 @@ int cuantasCC(sqlite3 *db){
     return numFilas;
 }
 
+//Devuelve la lista de Cuentas Corrientes
+CuentaCorriente* cogerCuentas (sqlite3 *db){
+    sqlite3_stmt *stmt;
+    char sql[] = "select * from CUENTA CORRIENTE";
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK){
+        printf("Error preparing statemet (SELECT)\n");
+        printf("%s\n", sqlite3_errmsg(db));
+    }
+
+    int numFilas = cuantasCC(db);
+    
+    CuentaCorriente* lista = (CuentaCorriente*)malloc(numFilas*sizeof(CuentaCorriente));
+    int contador = 0;
+
+    do {
+        result = sqlite3_step(stmt);
+        if (result == SQLITE_ROW){
+            lista[contador].numero = sqlite3_column_int(stmt, 0);
+            lista[contador].saldo = sqlite3_column_float(stmt, 1);
+            lista[contador].cliente = 
+            contador++;
+        }
+    } while (result == SQLITE_ROW);
+    
+    result = sqlite3_finalize(stmt);
+    if (result != SQLITE_OK) {
+        printf("Error finalizing statement (SELECT)\n");
+        printf("%s\n", sqlite3_errmsg(db));
+    }
+    return lista;
+}
+
 //Devuelve el numero de tarjetas.
 int cuantasTarjetas(sqlite3 *db){
     sqlite3_stmt *stmt;
@@ -154,6 +227,41 @@ int cuantasTarjetas(sqlite3 *db){
         return result;
     }
     return numFilas;
+}
+
+//Devuelve la lista de tarjetas
+Tarjeta* listaTarjetas(sqlite3* db){
+    sqlite3_stmt *stmt;
+    char sql[] = "select * from TARJETA";
+    int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+    if (result != SQLITE_OK) {
+		printf("Error preparing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+
+    int numFilas = cuantasTarjetas(db);
+    Tarjeta* lista = (Tarjeta*) malloc(numFilas*sizeof(Tarjeta));
+    int contador = 0;
+    do {
+		result = sqlite3_step(stmt) ;
+		if (result == SQLITE_ROW) {
+			lista[contador].num = sqlite3_column_int(stmt, 0);
+            lista[contador].pin = sqlite3_column_int(stmt,1);
+            lista[contador].limite = sqlite3_column_int(stmt,2);
+            int tamTipo = strlen((char*)sqlite3_column_text(stmt, 3));
+            lista[contador].tipo = (char*)malloc((tamTipo+1)*sizeof(char));
+            lista[contador].tipo = strcpy(lista[contador].tipo,(char *) sqlite3_column_text(stmt, 3));
+            lista[contador].numCC = sqlite3_column_int(stmt,4);
+            contador++;
+		}
+	} while (result == SQLITE_ROW);
+
+    result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+	return lista;
 }
 
 //Devuelve el numero de titulares.
@@ -208,4 +316,103 @@ int cuentasTransacciones(sqlite3 *db){
         return result;
     }
     return numFilas;
+}
+
+//Devuelve la lista de transacciones
+Transaccion* listaTransacciones(sqlite3* db){
+    sqlite3_stmt *stmt;
+    char sql[] = "select * from TRANSACCIONES";
+    int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+    if (result != SQLITE_OK) {
+		printf("Error preparing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+
+    int numFilas = cuantasTransacciones(db);
+    Transaccion* lista = (Transaccion*)malloc(numFilas*sizeof(Transaccion));
+    CuentaCorriente* o = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+    CuentaCorriente* d = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+    int contador = 0;
+    do {
+		result = sqlite3_step(stmt) ;
+		if (result == SQLITE_ROW) {
+			lista[contador].num = sqlite3_column_int(stmt, 0);
+            lista[contador].importe = sqlite3_column_double(stmt,1);
+            int tamDesc = strlen((char*)sqlite3_column_text(stmt,2));
+            lista[contador].descripcion = (char*)malloc((tamDesc+1)*sizeof(char));
+            lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite_column_text(stmt,3));
+            lista[contador].origen = 
+            contador++;
+		}
+	} while (result == SQLITE_ROW);
+
+    result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+	}
+	return lista;
+}
+
+//Devuelve el numero de acciones.
+int cuentasAcciones(sqlite3 *db){
+    sqlite3_stmt *stmt;
+    char sql[] = "select count(*) from ACCIONES";
+    int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+    if(result!=SQLITE_OK){
+        printf("Error preparando la consulta.\n");
+        printf("%s\n", sqlite3_errmsg(db));
+        return result;
+    }
+    int numFilas = 0;
+    do{
+        result = sqlite3_step(stmt);
+        if(result == SQLITE_ROW){
+            numFilas++;
+        }
+    } while(result == SQLITE_ROW);
+    
+    result = sqlite3_finalize(stmt);
+    if(result != SQLITE_OK){
+        printf("Error finalizando la consulta.\n");
+        printf("%s\n",sqlite3_errmsg(db));
+        return result;
+    }
+    return numFilas;
+}
+
+//Devuelve la lista de acciones.
+Accion* cogerAccion (sqlite3 *db){
+    sqlite3_stmt *stmt;
+    char sql[] = "select * from ACCIONES";
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK){
+        printf("Error preparing statemet (SELECT)\n");
+        printf("%s\n", sqlite3_errmsg(db));
+    }
+
+    int numFilas = cuantasAcciones(db);
+    
+    Accion* lista = (Accion*)malloc(numFilas*sizeof(Accion));
+    int contador = 0;
+
+    do {
+        result = sqlite3_step(stmt);
+        if (result == SQLITE_ROW){
+            lista[contador].num_valor = sqlite3_column_int(stmt, 0);
+            lista[contador].prec_actual = sqlite3_column_float(stmt, 1);
+            lista[contador].prec_compra = sqlite3_column_float(stmt, 2);
+            int tamNomEmpresa = strlen((char*)sqlite3_column_text(stmt,3));
+            lista[contador].empresa = (char*)malloc((tamNomEmpresa+1)*sizeof(char));
+			lista[contador].empresa = (lista[contador].empresa, (char *) sqlite3_column_text(stmt, 3));
+            lista[contador].dni_cliente = sqlite3_column_int(stmt, 4);
+        }
+    } while (result == SQLITE_ROW);
+    
+    result = sqlite3_finalize(stmt);
+    if (result != SQLITE_OK) {
+        printf("Error finalizing statement (SELECT)\n");
+        printf("%s\n", sqlite3_errmsg(db));
+    }
+    return lista;
 }

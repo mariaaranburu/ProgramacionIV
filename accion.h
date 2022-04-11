@@ -1,5 +1,6 @@
 #ifndef _ACCION_H_
 #define _ACCION_H_
+#include "cliente.h"
 
 typedef struct{
     int num_valor;
@@ -10,5 +11,6 @@ typedef struct{
 } Accion;
 
 void imprimirAccion(Accion a);
+Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes);
 
 #endif
