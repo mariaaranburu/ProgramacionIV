@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "menu.h"
-#include "..\gestionBD\bbdd.h"
 #include "transaccion.h"
+#include "..\gestionBD\bbdd.h"
 #include "..\logicaDeDatos\ficheros.h"
 #define MAX_CLIENTES 10
 #define NUM_TARJETAS 10*MAX_CLIENTES
@@ -27,12 +27,7 @@ int main(void) {
     CuentaCorriente* cuentas = (CuentaCorriente*)malloc(numCC*sizeof(CuentaCorriente));
     cuentas = cogerCuentas(db,clientes);
     //TARJETAS
-    int numTarjetas = cuantasTarjetas(db)
-
-
-
-
-
+    int numTarjetas = cuantasTarjetas(db);
     Transaccion *transacciones = (Transaccion*) malloc (NUM_TARJETAS*sizeof(Transaccion));
     int numTransacciones = MAX_CLIENTES;
     transacciones->num = 1;
@@ -51,7 +46,7 @@ int main(void) {
     tarjetas->limite = 1000;
     tarjetas->tipo = "credito";
     tarjetas->numCC = 1;
-    int numTarjetas = NUM_TARJETAS;
+    int numeroTarjetas = 10*10;
     int encontrado = iniciarSesion(clientes, MAX_CLIENTES);
     while (encontrado!=0) {
         printf("Los datos introducidos no son correctos.\n");
@@ -59,7 +54,7 @@ int main(void) {
     }
     printf("Estas dentro!\n");
     escribirFicheroClientes(clientes, MAX_CLIENTES);
-    imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numTarjetas, clientes[0]);
+    imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numeroTarjetas, clientes[0]);
     return 0;
 }
 
