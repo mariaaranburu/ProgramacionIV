@@ -6,7 +6,7 @@
 
 
 int main(void) {
-    CuentaCorriente cuenta;
+    CuentaCorriente cuenta = 
     Transaccion* transacciones;
     int numTransacciones;
     Tarjeta* tarjetas;
