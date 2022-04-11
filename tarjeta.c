@@ -6,7 +6,7 @@ void imprimirInfoTarjeta(Tarjeta t){
     printf("pin: %i",t.pin); 
     printf("limite: %i",t.limite); 
     printf("tipo: %s",t.tipo); 
-    printf("num c/c: %i",t.num_cc);
+    printf("num c/c: %i",t.numCC);
 }
 
 void imprimirNumTarjeta(Tarjeta* t, int numTarjetas){

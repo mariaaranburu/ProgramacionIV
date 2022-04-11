@@ -3,7 +3,7 @@
 #include "menu.h"
 #include "transaccion.h"
 #define MAX_CLIENTES 10
-#define NUM_TARJETAS 10
+#define NUM_TARJETAS 10*MAX_CLIENTES
 #define MAX_CHAR 30
 
 
@@ -16,7 +16,7 @@ int main(void) {
     tarjetas->pin = 1111;
     tarjetas->limite = 1000;
     tarjetas->tipo = "credito";
-    tarjetas->num_cc = 1;
+    tarjetas->numCC = 1;
     int numTarjetas = NUM_TARJETAS;
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
     clientes[0].dni = 73511346;

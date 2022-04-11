@@ -173,7 +173,7 @@ void todasMisTarjetas(Tarjeta* t, int numTarjetas){
 //Ver la info de una tarjeta
 void infoTarjeta(Tarjeta t){
     char r;
-    printf("La información de la tarjeta seleccionada es: \n");
+    printf("La informacion de la tarjeta seleccionada es: \n");
     imprimirInfoTarjeta(t);
     printf("Quiere modificar la tarjeta? (s/n)  ");
     scanf("%c",&r);
@@ -195,6 +195,7 @@ void modDatosTarjeta(Tarjeta* t){
     printf("1. Modificar el limite\n");
     printf("2. Modificar el PIN\n");
     scanf("%i",i);
+    fflush(stdin);
     if(i==1){
         printf("Inserte nuevo limite: ");
         scanf("%i",limite);
@@ -265,8 +266,43 @@ void misAcciones(void){
     printf("2. Comprar nuevas acciones\n");
     scanf("%i",&opcion);
     fflush(stdin);
+    switch (opcion)
+    {
+    case 1:
+        //TENGO QUE COGER LOS DATOS QUE METO
+        //consultarAcciones(acciones,dni_cliente, numAcciones);
+        break;
+    case 2:
+        //comprarNuevasAcciones(acciones, dni_cliente, numAcciones);
+    default:
+        break;
+    }
 }
 
+//misAcciones opcion 1
+void consultarAcciones(Accion* acciones, int dni_cliente, int numAcciones){
+    for(int i=0;i<numAcciones;i++){
+        if(acciones[i].dni_cliente == dni_cliente){
+            imprimirAccion(acciones[i]);
+        }
+    }
+    printf("Esas son tus acciones\n");
+}
+
+//misAcciones opcion2
+void comprarNuevasAcciones(Accion* acciones, int dni_cliente, int numAcciones){
+    int accionAC;
+    for(int i = 0;i< numAcciones; i++){
+        printf("%i. ",i);
+        imprimirAccion(acciones[i]);
+    }
+    printf("Que accion quiere comprar? ");
+    scanf("%i",&accionAC);
+    fflush(stdin);
+    //INSERTAR ACCION AL CLIENT
+}
+
+//ver la informacion relacionada con el perfil
 void miPerfil(Cliente c){
     char r;
     printf("DNI: %i\n",c.dni);
@@ -279,6 +315,30 @@ void miPerfil(Cliente c){
     fflush(stdin);
     if(r == 's'){
         //Metodo modificar datos
+    }
+}
+
+//modificar los datos del perfil
+void modPerfil(Cliente c){
+    int i;
+    char* nombre;
+    char* contrasenya;
+    printf("1. Modificar mi nombre\n");
+    printf("2. Modificar la contrasenya\n");
+    scanf("%i", &i);
+    fflush(stdin);
+    if(i==1){
+        printf("Inserta tu nuevo nombre y apellidos: ");
+        scanf("%s", &nombre);
+        fflush(stdin);
+        c.nombre = nombre;
+        printf("\n");
+    }else if(i==2){
+        printf("Inserte una nueva contrasenya: ");
+        scanf("%s", &contrasenya);
+        fflush(stdin);
+        c.contrasenya = contrasenya;
+        printf("\n");
     }
 }
 
