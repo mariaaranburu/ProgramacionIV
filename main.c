@@ -15,15 +15,13 @@ int main(void) {
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
     clientes[0].dni = 73511346;
     clientes[0].contrasenya = "1234A";
-    int encontrado = iniciarSesion(clientes,MAX_CLIENTES);
-    if (encontrado == 0) {
-        printf("Estas dentro!\n");
-        imprimirMenu(cuenta,transacciones,numTransacciones,tarjetas,numTarjetas);
+    int encontrado = iniciarSesion(clientes, MAX_CLIENTES);
+    while (encontrado!=0) {
+        printf("Los datos introducidos no son correctos.\n");
+        encontrado = iniciarSesion(clientes,MAX_CLIENTES);
     }
-    else {
-    printf("Los datos introducidos no son correctos.");
-    }
-    
+    printf("Estas dentro!\n");
+    imprimirMenu(cuenta,transacciones,numTransacciones,tarjetas,numTarjetas);
     return 0;
 }
 
