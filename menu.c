@@ -196,6 +196,7 @@ void modDatosTarjeta(Tarjeta* t){
     if(i==1){
         printf("Inserte nuevo limite: ");
         scanf("%i",limite);
+        fflush(stdin);
         (*t).limite = limite;
         printf("\n");
     }else if(i==2){
@@ -208,13 +209,60 @@ void modDatosTarjeta(Tarjeta* t){
 
 //Opcion 2 misTarjetas
 Tarjeta introducirDatos(void){
-    
+    Tarjeta tarjeta;
+    int numTarjeta;
+    int pin;
+    int limite;
+    int t;
+    char* tipo;
+    int num_cc;
+    printf("Introduzca el numero de la tarjeta: ");
+    scanf("%i",&numTarjeta);
+    fflush(stdin);
+    tarjeta.num = numTarjeta;
+    printf("\n");
+    printf("Introduzca el pin: ");
+    scanf("%i",&pin);
+    fflush(stdin);
+    tarjeta.pin=pin;
+    printf("\n");
+    printf("Introduzca el limite de la tarjeta: ");
+    scanf("%i",&limite);
+    fflush(stdin);
+    tarjeta.limite = limite;
+    printf("\n");
+    printf("Introduzca el tipo de la tarjeta: (1 -> MasterCard, 2->Visa, 3-> Amex) ");
+    scanf("%i",&tipo);
+    switch (t)
+    {
+    case 1 :
+        tarjeta.tipo = "MasterCard";
+        break;
+    case 2:
+        tarjeta.tipo = "Visa";
+        break;
+    case 3: 
+        tarjeta.tipo = "Amex";
+        break;
+    default:
+        break;
+    }
+    printf("\n");
+    printf("Introduzca el numero de la cuenta corriente a la que pertenece: ");
+    scanf("%i",&num_cc);
+    fflush(stdin);
+    tarjeta.numCC = num_cc;
+    printf("\n");
+    return tarjeta;
 }
 
 void misAcciones(void){
+    int opcion;
     printf("Elige una opcion\n");
     printf("1. Consultar acciones\n");
     printf("2. Comprar nuevas acciones\n");
+    scanf("%i",&opcion);
+    fflush(stdin);
 }
 
 void miPerfil(Cliente c){
