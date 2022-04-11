@@ -11,6 +11,7 @@ int iniciarSesion(Cliente* c,int max){
     int dni;
     char contra[TAM_MAX];
     char str[15];
+    printf("\n");
     printf("INICIO DE SESION\n");
     printf("-----------------------\n");
     printf("Inserta tu DNI (sin letra):  ");
@@ -42,7 +43,8 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
     printf("3. Ver mis acciones\n");
     printf("4. Ver mi perfil\n");
     printf("'q' para salir\n");
-    printf("Que quieres hacer? ");
+    printf("-----------------------------\n");
+    printf("Que quieres hacer? \n");
     scanf("%c",&r);
     fflush(stdin);
     switch (r)
@@ -83,7 +85,7 @@ void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
         consultarSaldo(c);
         break;
     case '2':
-        consultarHistoria(c, t,numT);
+        consultarHistoria(c, t, numT);
         break;
     case '3':
         //El caso 3 aún no está
@@ -97,7 +99,7 @@ void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
 //Opcion 1 de miCuentaCorriente
 void consultarSaldo(CuentaCorriente cuenta){
     printf("------------------------------");
-    printf("El saldo es: %f",cuenta.saldo);
+    printf("El saldo es: %2.f",cuenta.saldo);
 }
 
 //Opcion 2 de miCuentaCorriente

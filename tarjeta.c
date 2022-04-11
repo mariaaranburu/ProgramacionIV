@@ -11,6 +11,6 @@ void imprimirInfoTarjeta(Tarjeta t){
 
 void imprimirNumTarjeta(Tarjeta* t, int numTarjetas){
     for(int i=0;i<numTarjetas;i++){
-        printf("Tarjeta %i: %i\n",i,(*t).num);
+        printf("Tarjeta %i: %i\n",i, t->num);
     }
 }
