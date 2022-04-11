@@ -1,24 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "menu.h"
+#include "..\gestionBD\bbdd.h"
 #include "transaccion.h"
+#include "..\logicaDeDatos\ficheros.h"
 #define MAX_CLIENTES 10
 #define NUM_TARJETAS 10*MAX_CLIENTES
 #define MAX_CHAR 30
 
 
 int main(void) {
-    Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
-    clientes[0].dni = 73511346;
-    clientes[0].contrasenya = "1234A";
-    clientes[0].nombre = "Jose";
-    CuentaCorriente *cuentas = (CuentaCorriente*) malloc(2*sizeof(CuentaCorriente));
-    cuentas->numero = 1;
-    cuentas->saldo = 1000;
-    cuentas->cliente = clientes;
-    cuentas[1].numero = 2;
-    cuentas[1].saldo = 1500;
-    cuentas[1].cliente = clientes;
+    sqlite3 *db;
+    //Abrir base de datos
+    int result = sqlite3_open("bbdd.sqlite", &db);
+
+    //CLIENTES
+    int numClientes = cuantosClientes(db);
+    Cliente* clientes = (Cliente*) malloc (numClientes*sizeof(Cliente));
+    clientes = cogerClientes(db);
+    //ACCIONES
+    int numAcciones = cuantasAcciones(db);
+    Accion* acciones = (Accion*)malloc(numAcciones*sizeof(Accion));
+    acciones = listaAcciones(db,clientes);
+    //CUENTAS CORRIENTES
+    int numCC = cuantasCC(db);
+    CuentaCorriente* cuentas = (CuentaCorriente*)malloc(numCC*sizeof(CuentaCorriente));
+    cuentas = cogerCuentas(db,clientes);
+    //TARJETAS
+    int numTarjetas = cuantasTarjetas(db)
+
+
+
+
+
     Transaccion *transacciones = (Transaccion*) malloc (NUM_TARJETAS*sizeof(Transaccion));
     int numTransacciones = MAX_CLIENTES;
     transacciones->num = 1;
@@ -44,6 +58,7 @@ int main(void) {
         encontrado = iniciarSesion(clientes,MAX_CLIENTES);
     }
     printf("Estas dentro!\n");
+    escribirFicheroClientes(clientes, MAX_CLIENTES);
     imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numTarjetas, clientes[0]);
     return 0;
 }

@@ -34,7 +34,7 @@ int iniciarSesion(Cliente* c,int max){
     return 1;
 }
 
-void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj) {
+void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj) {
     char r;
     printf("Elige una opcion: \n");
     printf("1. Ver mi cuenta corriente\n");
@@ -49,7 +49,7 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
     switch (r)
         {
             case '1':
-                miCuentaCorriente(c,transacciones,numTrans);
+                miCuentaCorriente(c, transacciones, numTrans);
                 break;
             case '2':
                 misTarjetas(tarjetas, numTarj);
@@ -70,7 +70,7 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
         } 
 }
 
-void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
+void miCuentaCorriente(CuentaCorriente* c, Transaccion* t,int numT) {
     char r;
     printf("Elige una opcion: \n");
     printf("1.Consultar saldo\n");
@@ -96,24 +96,24 @@ void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
 }
 
 //Opcion 1 de miCuentaCorriente
-void consultarSaldo(CuentaCorriente cuenta){
+void consultarSaldo(CuentaCorriente* cuenta){
     printf("------------------------------");
-    printf("El saldo es: %2.f",cuenta.saldo);
+    printf("El saldo es: %2.f",cuenta->saldo);
 }
 
 //Opcion 2 de miCuentaCorriente
-void consultarHistoria(CuentaCorriente cuenta, Transaccion* transacciones,int numTransacciones){
+void consultarHistoria(CuentaCorriente* cuenta, Transaccion* transacciones,int numTransacciones){
     for(int i=0;i<numTransacciones;i++){
         int numDestino = transacciones[i].destino->numero;
         int numOrigen = transacciones[i].origen->numero;
-        if(cuenta.numero == numDestino || cuenta.numero == numOrigen){
+        if(cuenta->numero == numDestino || cuenta->numero == numOrigen){
             imprimirTransaccion(transacciones[i]);
         }
     }
 }
 
 //Opcion 3 de miCuentaCorriente
-void nuevaTransferencia(CuentaCorriente miCuentaCorriente, CuentaCorriente* listaCuentas, int numeroCuentas){
+void nuevaTransferencia(CuentaCorriente* miCuentaCorriente, CuentaCorriente* listaCuentas, int numeroCuentas){
     Transaccion nuevaTransaccion;
     int num;
     float importe;

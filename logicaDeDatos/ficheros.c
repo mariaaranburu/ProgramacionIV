@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ficheros.h"
-#include "cliente.h"
+#include "..\logicaDeNegocio\cliente.h"
 
 #define MAX_LINE 30
 
