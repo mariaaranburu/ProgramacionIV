@@ -9,4 +9,6 @@ typedef struct{
     int dni_cliente; 
 } Accion;
 
+void imprimirAccion(Accion a);
+
 #endif

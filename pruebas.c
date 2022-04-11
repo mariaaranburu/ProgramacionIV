@@ -7,18 +7,13 @@ int main (void){
     sqlite3 *db;
     //Abrir base de datos
 	int result = sqlite3_open("bbdd.sqlite", &db);
-	if (result != SQLITE_OK) {
-		printf("Error opening database\n");
-		return result;
-	}
-    printf("Database opened\n");
     ////////////////////////////////////////////////////////////////////
 
-    int p;
-    p = cuantosClientes(db);
-    printf("lineas: %i\n",p);
+    int numClientes;
+    numClientes = cuantosClientes(db);
+    printf("lineas: %i\n",numClientes);
     printf("Hola");
-    Cliente* c = (Cliente*)malloc(p*sizeof(Cliente));
+    Cliente* c = (Cliente*)malloc(numClientes*sizeof(Cliente));
     printf("Hola");
     c = cogerClientes(db);
     printf("Hola");

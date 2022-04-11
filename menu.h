@@ -4,6 +4,7 @@
 #include "cuentacorriente.h"
 #include "tarjeta.h"
 #include "transaccion.h"
+#include "accion.h"
 
 int iniciarSesion(Cliente* c,int max);
 void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj);
@@ -17,5 +18,6 @@ void modDatosTarjeta(Tarjeta* t);
 Tarjeta introducirDatos(void);
 void misAcciones(void);
 void miPerfil(Cliente c);
+void modPerfil(Cliente c);
 
 #endif

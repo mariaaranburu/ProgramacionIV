@@ -6,7 +6,7 @@ typedef struct {
     int pin;
     int limite;
     char* tipo;
-    int num_cc;
+    int numCC;
 } Tarjeta;
 
 void imprimirInfoTarjeta(Tarjeta t);
