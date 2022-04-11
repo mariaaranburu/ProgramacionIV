@@ -33,5 +33,5 @@ CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas){
             break;
         }
     }
-    return cuentas[bueno];
+    return &cuentas[bueno];
 }
