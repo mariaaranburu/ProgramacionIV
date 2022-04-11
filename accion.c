@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "accion.h"
 
 void imprimirAccion(Accion a){
