@@ -85,7 +85,7 @@ void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
         consultarSaldo(c);
         break;
     case '2':
-        consultarHistoria(c, t,numT);
+        consultarHistoria(c, t, numT);
         break;
     case '3':
         //El caso 3 aún no está
