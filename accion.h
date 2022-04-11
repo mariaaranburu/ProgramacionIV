@@ -11,6 +11,5 @@ typedef struct{
 } Accion;
 
 void imprimirAccion(Accion a);
-Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes);
 
 #endif

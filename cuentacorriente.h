@@ -16,4 +16,4 @@ void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int
 
 CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas);
 
-#endif   
+#endif

@@ -24,8 +24,9 @@ void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int
     }
 }
 
+//
 CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas){
-    int bueno;
+    int bueno = 0;
     for(int i=0; i<numCuentas;i++){
         if(cuentas[i].numero == numCC){
             bueno = i;

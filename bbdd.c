@@ -98,6 +98,7 @@ int cuantosClientes(sqlite3 *db){
     return numFilas;
 }
 
+//Devuelve la lista de clientes.
 Cliente* cogerClientes (sqlite3 *db){
     sqlite3_stmt *stmt;
     char sql[] = "select * from CLIENTE";
@@ -170,7 +171,7 @@ int cuantasCC(sqlite3 *db){
 }
 
 //Devuelve la lista de Cuentas Corrientes
-CuentaCorriente* cogerCuentas (sqlite3 *db){
+CuentaCorriente* cogerCuentas (sqlite3 *db,Cliente* clientes){
     sqlite3_stmt *stmt;
     char sql[] = "select * from CUENTA CORRIENTE";
     int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
@@ -183,13 +184,17 @@ CuentaCorriente* cogerCuentas (sqlite3 *db){
     
     CuentaCorriente* lista = (CuentaCorriente*)malloc(numFilas*sizeof(CuentaCorriente));
     int contador = 0;
+    int dni;
+    int numClientes = cuantosClientes(db);
 
     do {
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW){
             lista[contador].numero = sqlite3_column_int(stmt, 0);
             lista[contador].saldo = sqlite3_column_float(stmt, 1);
-            lista[contador].cliente = 
+            lista[contador].cliente = (Cliente*)malloc(sizeof(Cliente));
+            dni = sqlite3_column_int(stmt,2);
+            lista[contador].cliente = buscarCliente(dni,clientes,numClientes);
             contador++;
         }
     } while (result == SQLITE_ROW);
@@ -291,6 +296,8 @@ int cuantosTitulares(sqlite3 *db){
     return numFilas;
 }
 
+
+
 //Devuelve el numero de transacciones.
 int cuentasTransacciones(sqlite3 *db){
     sqlite3_stmt *stmt;
@@ -319,7 +326,7 @@ int cuentasTransacciones(sqlite3 *db){
 }
 
 //Devuelve la lista de transacciones
-Transaccion* listaTransacciones(sqlite3* db){
+Transaccion* listaTransacciones(sqlite3* db,CuentaCorriente* cuentas, int numCuentas){
     sqlite3_stmt *stmt;
     char sql[] = "select * from TRANSACCIONES";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
@@ -330,8 +337,8 @@ Transaccion* listaTransacciones(sqlite3* db){
 
     int numFilas = cuantasTransacciones(db);
     Transaccion* lista = (Transaccion*)malloc(numFilas*sizeof(Transaccion));
-    CuentaCorriente* o = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
-    CuentaCorriente* d = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+    int numOrigen;
+    
     int contador = 0;
     do {
 		result = sqlite3_step(stmt) ;
@@ -341,7 +348,12 @@ Transaccion* listaTransacciones(sqlite3* db){
             int tamDesc = strlen((char*)sqlite3_column_text(stmt,2));
             lista[contador].descripcion = (char*)malloc((tamDesc+1)*sizeof(char));
             lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite_column_text(stmt,3));
-            lista[contador].origen = 
+            lista[contador].origen = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+            numOrigen = sqlite3_column_int(stmt,4);
+            lista[contador].origen = buscar(numOrigen,cuentas,numCuentas);
+            int numDestino = sqlite3_column_int(stmt,5);
+            lista[contador].destino = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+            lista[contador].destino = buscar(numDestino,cuentas,numCuentas);
             contador++;
 		}
 	} while (result == SQLITE_ROW);
