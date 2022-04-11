@@ -41,11 +41,12 @@ void leerFicheroClientes (Cliente * clientes, int* size){
 				dni[i]=c;
 			}
 		}
-		char *b;
+		int b;
 		sscanf(dni, "%i", &b);
-        clientes[i].dni=strcpy(clientes[i].dni, b);
+        clientes[i].dni=b;
 		//clientes[i].setDni(b);
 		// sscanf(dni, "%i", &usuarios[i].setDni(dni));
+		limpiar(dni);
 
 		c='a';
 
