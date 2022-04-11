@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "cuentacorriente.h"
 #include "cliente.h"
 
@@ -24,14 +25,16 @@ void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int
     }
 }
 
-//
+
 CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas){
-    int bueno = 0;
+    CuentaCorriente* c = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
     for(int i=0; i<numCuentas;i++){
         if(cuentas[i].numero == numCC){
-            bueno = i;
-            break;
+            c->numero = cuentas[i].numero;
+            c->saldo = cuentas[i].saldo;
+            (*c).cliente = (Cliente*)malloc(sizeof(Cliente));
+            (*c).cliente = cuentas[i].cliente;
         }
     }
-    return &cuentas[bueno];
+    return c;
 }
