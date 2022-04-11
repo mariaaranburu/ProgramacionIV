@@ -35,7 +35,7 @@ int iniciarSesion(Cliente* c,int max){
     return 1;
 }
 
-void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj) {
+void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj, Cliente cli) {
     char r;
     printf("Elige una opcion: \n");
     printf("1. Ver mi cuenta corriente\n");
@@ -43,7 +43,7 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
     printf("3. Ver mis acciones\n");
     printf("4. Ver mi perfil\n");
     printf("'q' para salir\n");
-    printf("-----------------------------\n");
+    printf("-----------------------\n");
     printf("Que quieres hacer? \n");
     scanf("%c",&r);
     fflush(stdin);
@@ -61,7 +61,7 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
                 break;
             case '4':
                 /* code */
-                printf("Caso 4\n");
+                miPerfil(cli);
                 break;
             case 'q':
                 /* code */
@@ -71,10 +71,10 @@ void imprimirMenu(CuentaCorriente c, Transaccion* transacciones,int numTrans,Tar
         } 
 }
 
-void miCuentaCorriente(CuentaCorriente c, Transaccion* t,int numT) {
+void miCuentaCorriente(CuentaCorriente c, Transaccion* t, int numT) {
     char r;
     printf("Elige una opcion: \n");
-    printf("1.Consultar saldo\n");
+    printf("1. Consultar saldo\n");
     printf("2. Consultar historial\n");
     printf("3. Hacer transferencias\n");
     scanf("%c",&r);
@@ -305,16 +305,19 @@ void comprarNuevasAcciones(Accion* acciones, int dni_cliente, int numAcciones){
 //ver la informacion relacionada con el perfil
 void miPerfil(Cliente c){
     char r;
+    printf("ESTOS SON TUS DATOS: \n");
+    printf("-----------------------\n");
     printf("DNI: %i\n",c.dni);
     printf("Nombre: %s\n",c.nombre);
     printf("Fecha nacimiento: %s\n",c.fec_nac);
     printf("Sexo: %s\n",c.sexo);
     printf("Contrasenya: %s\n",c.contrasenya);
-    printf("Modificar los datos (s/n) ");
+    printf("Quieres modificar tus datos? (s/n) ");
     scanf("%c",&r);
     fflush(stdin);
     if(r == 's'){
         //Metodo modificar datos
+        modPerfil(c);
     }
 }
 

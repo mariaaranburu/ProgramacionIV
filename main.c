@@ -21,13 +21,14 @@ int main(void) {
     Cliente *clientes = (Cliente*) malloc (MAX_CLIENTES*sizeof(Cliente));
     clientes[0].dni = 73511346;
     clientes[0].contrasenya = "1234A";
+    clientes[0].nombre = "Jose";
     int encontrado = iniciarSesion(clientes, MAX_CLIENTES);
     while (encontrado!=0) {
         printf("Los datos introducidos no son correctos.\n");
         encontrado = iniciarSesion(clientes,MAX_CLIENTES);
     }
     printf("Estas dentro!\n");
-    imprimirMenu(cuenta,transacciones,numTransacciones,tarjetas,numTarjetas);
+    imprimirMenu(cuenta,transacciones,numTransacciones,tarjetas,numTarjetas, clientes[0]);
     return 0;
 }
 
