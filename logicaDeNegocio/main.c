@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "menu.h"
 #include "transaccion.h"
+#include"tarjeta.h"
+#include "cliente.h"
 #include "..\gestionBD\bbdd.h"
 #define MAX_CLIENTES 10
 #define MAX_GENERAL 10*MAX_CLIENTES

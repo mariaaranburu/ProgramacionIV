@@ -191,7 +191,7 @@ CuentaCorriente* cogerCuentas (sqlite3 *db,Cliente* clientes){
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW){
             lista[contador].numero = sqlite3_column_int(stmt, 0);
-            lista[contador].saldo = sqlite3_column_float(stmt, 1);
+            lista[contador].saldo = sqlite3_column_double(stmt, 1);
             lista[contador].cliente = (Cliente*)malloc(sizeof(Cliente));
             dni = sqlite3_column_int(stmt,2);
             lista[contador].cliente = buscarCliente(dni,clientes,numClientes);
@@ -347,7 +347,7 @@ Transaccion* listaTransacciones(sqlite3* db,CuentaCorriente* cuentas, int numCue
             lista[contador].importe = sqlite3_column_double(stmt,1);
             int tamDesc = strlen((char*)sqlite3_column_text(stmt,2));
             lista[contador].descripcion = (char*)malloc((tamDesc+1)*sizeof(char));
-            lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite_column_text(stmt,3));
+            lista[contador].descripcion = strcpy(lista[contador].descripcion,(char*)sqlite3_column_text(stmt,3));
             lista[contador].origen = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
             numOrigen = sqlite3_column_int(stmt,4);
             lista[contador].origen = buscar(numOrigen,cuentas,numCuentas);
@@ -412,8 +412,8 @@ Accion* cogerAccion (sqlite3 *db){
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW){
             lista[contador].num_valor = sqlite3_column_int(stmt, 0);
-            lista[contador].prec_actual = sqlite3_column_float(stmt, 1);
-            lista[contador].prec_compra = sqlite3_column_float(stmt, 2);
+            lista[contador].prec_actual = sqlite3_column_double(stmt, 1);
+            lista[contador].prec_compra = sqlite3_column_double(stmt, 2);
             int tamNomEmpresa = strlen((char*)sqlite3_column_text(stmt,3));
             lista[contador].empresa = (char*)malloc((tamNomEmpresa+1)*sizeof(char));
 			lista[contador].empresa = (lista[contador].empresa, (char *) sqlite3_column_text(stmt, 3));
@@ -426,5 +426,41 @@ Accion* cogerAccion (sqlite3 *db){
         printf("Error finalizing statement (SELECT)\n");
         printf("%s\n", sqlite3_errmsg(db));
     }
-    return lista;
+    return lista; 
 }
+
+CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas){
+    CuentaCorriente* c = (CuentaCorriente*)malloc(sizeof(CuentaCorriente));
+    for(int i=0; i<numCuentas;i++){
+        if(cuentas[i].numero == numCC){
+            c->numero = cuentas[i].numero;
+            c->saldo = cuentas[i].saldo;
+            (*c).cliente = (Cliente*)malloc(sizeof(Cliente));
+            (*c).cliente = cuentas[i].cliente;
+            }
+        }
+    return c;
+}
+
+Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes){
+    Cliente* d = (Cliente*)malloc(sizeof(Cliente));
+    for(int i=0; i<numClientes;i++){
+        if(clientes[i].dni==dniBuscado){
+            d->dni = clientes[i].dni;
+            int tamNombre = strlen(clientes[i].nombre);
+            d->nombre = (char*)malloc((tamNombre+1)*sizeof(char));
+            d->nombre = strcpy(d->nombre,clientes[i].nombre);
+            int tamFecNac = strlen(clientes[i].fec_nac);
+            d->fec_nac = (char*)malloc((tamFecNac+1)*sizeof(char));
+            d->fec_nac = strcpy(d->fec_nac,clientes[i].fec_nac);
+            int tamSexo = strlen(clientes[i].sexo);
+            d->sexo = (char*)malloc((tamSexo+1)*sizeof(char));
+            d->sexo = strcpy(d->sexo,clientes[i].sexo);
+            int tamContra = strlen(clientes[i].contrasenya);
+            d->contrasenya = (char*)malloc((tamContra+1)*sizeof(char));
+            d->contrasenya = strcpy(d->contrasenya,clientes[i].contrasenya);
+            break;
+        }
+    }
+    return d;
+} 
