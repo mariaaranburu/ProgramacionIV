@@ -7,7 +7,7 @@
 int cuantasAcciones(sqlite3 *db){
     
     sqlite3_stmt *stmt;
-    char sql[] = "select count(*) from ACCION";
+    char sql[] = "select * from ACCION";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
     if(result!=SQLITE_OK){
         printf("Error preparando la consulta.\n");
@@ -72,10 +72,11 @@ Accion* listaAcciones(sqlite3* db, Cliente* clientes){
 }
 
 //Devuelve el numero de clientes.
-int cuantosClientes(sqlite3 *db){
+int cuantosClientes(sqlite3* db){
     sqlite3_stmt *stmt;
     char sql[] = "select * from CLIENTE";
-    int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+    int result = sqlite3_prepare_v2(db,sql,strlen(sql)+1,&stmt,NULL);
+
     if(result!=SQLITE_OK){
         printf("Error preparando la consulta.\n");
         printf("%s\n", sqlite3_errmsg(db));
@@ -88,7 +89,7 @@ int cuantosClientes(sqlite3 *db){
             numFilas++;
         }
     } while(result == SQLITE_ROW);
-    
+
     result = sqlite3_finalize(stmt);
     if(result != SQLITE_OK){
         printf("Error finalizando la consulta.\n");
@@ -146,7 +147,7 @@ Cliente* cogerClientes (sqlite3 *db){
 //Devuelve el numero de cuentas corrientes.
 int cuantasCC(sqlite3 *db){
     sqlite3_stmt *stmt;
-    char sql[] = "select count(*) from CUENTA_CORRIENTE";
+    char sql[] = "select * from CUENTA_CORRIENTE";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
     if(result!=SQLITE_OK){
         printf("Error preparando la consulta.\n");
@@ -210,9 +211,10 @@ CuentaCorriente* cogerCuentas (sqlite3 *db,Cliente* clientes){
 //Devuelve el numero de tarjetas.
 int cuantasTarjetas(sqlite3 *db){
     sqlite3_stmt *stmt;
-    char sql[] = "select count(*) from TARJETAS";
+    char sql[] = "select * from TARJETA";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
     if(result!=SQLITE_OK){
+        printf("Estoy en tarjetas\n");
         printf("Error preparando la consulta.\n");
         printf("%s\n", sqlite3_errmsg(db));
         return result;
@@ -272,7 +274,7 @@ Tarjeta* listaTarjetas(sqlite3* db){
 //Devuelve el numero de titulares.
 int cuantosTitulares(sqlite3 *db){
     sqlite3_stmt *stmt;
-    char sql[] = "select count(*) from TITULARES";
+    char sql[] = "select * from TITULARES";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
     if(result!=SQLITE_OK){
         printf("Error preparando la consulta.\n");
@@ -301,7 +303,7 @@ int cuantosTitulares(sqlite3 *db){
 //Devuelve el numero de transacciones.
 int cuantasTransacciones(sqlite3 *db){
     sqlite3_stmt *stmt;
-    char sql[] = "select count(*) from TRANSACCIONES";
+    char sql[] = "select * from TRANSACCIONES";
     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
     if(result!=SQLITE_OK){
         printf("Error preparando la consulta.\n");
@@ -367,31 +369,31 @@ Transaccion* listaTransacciones(sqlite3* db,CuentaCorriente* cuentas, int numCue
 }
 
 //Devuelve el numero de acciones.
-// int cuantasAcciones(sqlite3 *db){
-//     sqlite3_stmt *stmt;
-//     char sql[] = "select count(*) from ACCIONE";
-//     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
-//     if(result!=SQLITE_OK){
-//         printf("Error preparando la consulta.\n");
-//         printf("%s\n", sqlite3_errmsg(db));
-//         return result;
-//     }
-//     int numFilas = 0;
-//     do{
-//         result = sqlite3_step(stmt);
-//         if(result == SQLITE_ROW){
-//             numFilas++;
-//         }
-//     } while(result == SQLITE_ROW);
+/*int cuantasAcciones(sqlite3 *db){
+     sqlite3_stmt *stmt;
+     char sql[] = "select count(*) from ACCIONE";
+     int result = sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
+     if(result!=SQLITE_OK){
+         printf("Error preparando la consulta.\n");
+         printf("%s\n", sqlite3_errmsg(db));
+         return result;
+     }
+     int numFilas = 0;
+     do{
+         result = sqlite3_step(stmt);
+         if(result == SQLITE_ROW){
+             numFilas++;
+         }
+     } while(result == SQLITE_ROW);
     
-//     result = sqlite3_finalize(stmt);
-//     if(result != SQLITE_OK){
-//         printf("Error finalizando la consulta.\n");
-//         printf("%s\n",sqlite3_errmsg(db));
-//         return result;
-//     }
-//     return numFilas;
-// }
+     result = sqlite3_finalize(stmt);
+     if(result != SQLITE_OK){
+         printf("Error finalizando la consulta.\n");
+         printf("%s\n",sqlite3_errmsg(db));
+         return result;
+     }
+     return numFilas;
+ }*/
 
 //Devuelve la lista de acciones.
 Accion* cogerAccion (sqlite3 *db){

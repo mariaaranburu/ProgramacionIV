@@ -15,6 +15,7 @@ Cliente* cogerClientes (sqlite3 *db);
 int cuantasCC(sqlite3 *db);
 CuentaCorriente* cogerCuentas (sqlite3 *db, Cliente* clientes);
 int cuantasTarjetas(sqlite3 *db);
+Tarjeta* listaTarjetas(sqlite3* db);
 int cuantosTitulares(sqlite3 *db);
 int cuantasTransacciones(sqlite3 *db);
 Accion* listaAcciones(sqlite3* db, Cliente* clientes);

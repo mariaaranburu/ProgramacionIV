@@ -12,6 +12,6 @@ typedef struct {
 
 void imprimirCliente (Cliente c);
 
-Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes);
+Cliente* buscarElCliente(int dniBuscado, Cliente* clientes, int numClientes);
 
 #endif

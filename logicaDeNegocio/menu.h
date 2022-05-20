@@ -6,9 +6,9 @@
 #include "transaccion.h"
 #include "accion.h"
 
-int iniciarSesion(Cliente* c,int max);
-void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj);
-void miCuentaCorriente(CuentaCorriente* c, Transaccion* t,int numT);
+Cliente* iniciarSesion(Cliente* c,int max);
+void imprimirMenu( CuentaCorriente* c, int numCC, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj, Cliente* clientes);
+void miCuentaCorriente(CuentaCorriente* c, int numCC, Transaccion* t,int numT);
 void consultarSaldo(CuentaCorriente* cuenta);
 void consultarHistoria(CuentaCorriente* cuenta, Transaccion* transacciones,int numTransacciones);
 void misTarjetas(Tarjeta* t, int numTarjetas);

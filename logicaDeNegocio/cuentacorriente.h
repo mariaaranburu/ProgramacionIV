@@ -14,6 +14,10 @@ CuentaCorriente cogerCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, 
 
 void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int numeroCuenta, float modificacion, char tipo);
 
-CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas);
+CuentaCorriente* buscarCC(int numCC, CuentaCorriente* cuentas, int numCuentas);
+
+CuentaCorriente* buscarCC_Cliente(int dni, int numCuentas, CuentaCorriente* cuentas);
+
+int cuentasCC_dni (int dni, int numCuentas, CuentaCorriente* cuentas);
 
 #endif

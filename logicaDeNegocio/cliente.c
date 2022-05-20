@@ -7,7 +7,7 @@ void imprimirCliente (Cliente c) {
     printf("[DNI: %i, Nombre: %s, Fecha nacimiento: %s, Sexo: %s, Contrasenya: %s]\n",c.dni,c.nombre,c.fec_nac,c.sexo,c.contrasenya);
 }
 
-Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes){
+Cliente* buscarElCliente(int dniBuscado, Cliente* clientes, int numClientes){
     Cliente* d = (Cliente*)malloc(sizeof(Cliente));
     for(int i=0; i<numClientes;i++){
         if(clientes[i].dni==dniBuscado){

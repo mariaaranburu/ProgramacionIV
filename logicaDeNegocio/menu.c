@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "menu.h"
 
 #define TAM_MAX 20
 
-int iniciarSesion(Cliente* c,int max){
+/*Cliente iniciarSesion(Cliente* c,int max){
     //Puede acceder 0, resto no entra
-    int entra;
+    int entra = 0;
     int dni;
     char contra[TAM_MAX];
     char str[15];
@@ -27,17 +28,57 @@ int iniciarSesion(Cliente* c,int max){
     for(int i=0;i<max;i++){
         if(dni==c[i].dni){
             if(strcmp(contra,c[i].contrasenya)==0){
-                return 0;
+                entra = i;
+                break;
             }
-        } 
+        }   
     }
-    return 1;
+    if(entra != 0){
+        printf("Estas dentro!\n");
+        return c[entra];
+    }else if(entra == 0){
+        printf("Los datos introducidos no son correctos. Vuelva a intentarlo.\n");
+        iniciarSesion(c,max);
+    }
+}*/
+
+Cliente* iniciarSesion(Cliente* c, int max){
+    int encontrado = 0;
+    int pos;
+    int dni;
+    char contra[TAM_MAX];
+    char str[15];
+    while(encontrado!=1){
+        printf("\n");
+        printf("INICIO DE SESION\n");
+        printf("-----------------------\n");
+        printf("Inserta tu DNI (sin letra):  ");
+        fgets(str,15,stdin);
+        sscanf(str,"%d",&dni);
+        fflush(stdin);
+        printf("\n");
+        printf("Inserta tu contrasenya: ");
+        scanf("%s",contra);
+        fflush(stdin);
+        printf("\n");  
+        for(int i=0;i<max;i++){
+            if(dni==c[i].dni){
+                if(strcmp(contra,c[i].contrasenya)==0){
+                    printf("Estas dentro!");
+                    encontrado = 1;
+                    pos = i;
+                    break;
+                }
+            }   
+        }   
+    }
+    return &c[pos];
 }
 
-void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj, Cliente cli) {
+void imprimirMenu(CuentaCorriente* c, int numCC, Transaccion* transacciones,int numTrans,Tarjeta* tarjetas, int numTarj, Cliente* clientes) {
     char r;
     printf("Elige una opcion: \n");
-    printf("1. Ver mi cuenta corriente\n");
+    printf("1. Ver una de mis cuentas corrientes\n");
     printf("2. Ver mis tarjetas\n");
     printf("3. Ver mis acciones\n");
     printf("4. Ver mi perfil\n");
@@ -49,7 +90,12 @@ void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Ta
     switch (r)
         {
             case '1':
-                miCuentaCorriente(c, transacciones, numTrans);
+                for(int i=0; i<numCC; i++){
+                    printf("%i.",i+1);
+                    imprimirCuenta(&c[i]);
+                    printf("\n");
+                }
+                miCuentaCorriente(c,numCC, transacciones, numTrans);
                 break;
             case '2':
                 misTarjetas(tarjetas, numTarj);
@@ -70,8 +116,20 @@ void imprimirMenu(CuentaCorriente* c, Transaccion* transacciones,int numTrans,Ta
         } 
 }
 
-void miCuentaCorriente(CuentaCorriente* c, Transaccion* t,int numT) {
+void miCuentaCorriente(CuentaCorriente* c, int numCC, Transaccion* t,int numT) {
     char r;
+    int cuenta;
+    printf("Esta(s) es/son sus cuenta(s): \n");
+    for(int i=0; i<numCC; i++){
+        printf("%i.",(i+1));
+        imprimirCuenta(&c[i]);
+        printf("\n");
+    }
+    printf("Que cuenta quiere ver?\n");
+    scanf("%i",&cuenta);
+    fflush(stdin);
+    cuenta = cuenta - 1;
+
     printf("Elige una opcion: \n");
     printf("1.Consultar saldo\n");
     printf("2. Consultar historial\n");
@@ -81,10 +139,10 @@ void miCuentaCorriente(CuentaCorriente* c, Transaccion* t,int numT) {
     switch (r)
     {
     case '1':
-        consultarSaldo(c);
+        consultarSaldo(&c[cuenta]);
         break;
     case '2':
-        consultarHistoria(c, t, numT);
+        consultarHistoria(&c[cuenta], t, numT);
         break;
     case '3':
         //El caso 3 aún no está
