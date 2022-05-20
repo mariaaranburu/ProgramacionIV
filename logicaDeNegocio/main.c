@@ -2,16 +2,48 @@
 #include <stdlib.h>
 #include "menu.h"
 #include "transaccion.h"
+<<<<<<< HEAD
+#include"tarjeta.h"
+#include "cliente.h"
+#include "..\gestionBD\bbdd.h"
+=======
 #include "..\gestionBD\bbdd.h"
 #include "..\logicaDeDatos\ficheros.h"
+>>>>>>> 5992b6e5956e004ea33136aab3301e5bf296946f
 #define MAX_CLIENTES 10
-#define NUM_TARJETAS 10*MAX_CLIENTES
+#define MAX_GENERAL 10*MAX_CLIENTES
 #define MAX_CHAR 30
 
 
 int main(void) {
     sqlite3 *db;
     //Abrir base de datos
+<<<<<<< HEAD
+	int result = sqlite3_open("bbdd.sqlite", &db);
+
+    //CLIENTES
+    int numClientes = cuentosClientes(db);
+    Cliente* clientes = (Cliente*)malloc(MAX_CLIENTES*sizeof(Cliente));
+    clientes = cogerClientes;
+    //ACCIONES
+    int numAcciones = cuantasAcciones(db);
+    Accion* acciones = (Accion*)malloc(MAX_GENERAL*sizeof(Accion));
+    acciones = listaAcciones(db,clientes);
+    //CUENTAS CORRIENTES
+    int numCC = cuantasCC(db);
+    CuentaCorriente* cuentas = (CuentaCorriente*)malloc(MAX_GENERAL*sizeof(CuentaCorriente));
+    cuentas = cogerCuentas(db,clientes);
+    //TARJETAS
+    int numTarjetas = cuantasTarjetas(db);
+    Tarjeta* tarjetas = (Tarjeta*)malloc(MAX_GENERAL*sizeof(Tarjeta));
+    tarjetas = listaTarjetas(db);
+    //TRANSACCIONES
+    int numTransacciones = cuantasTransacciones(db);
+    Transaccion* transacciones = (Transaccion*)malloc(MAX_GENERAL*sizeof(Transaccion));
+    transacciones = listaTransacciones(db,cuentas,numCC);
+
+
+=======
     int result = sqlite3_open("bbdd.sqlite", &db);
 
     //CLIENTES
@@ -47,13 +79,21 @@ int main(void) {
     tarjetas->tipo = "credito";
     tarjetas->numCC = 1;
     int numeroTarjetas = 10*10;
+>>>>>>> 5992b6e5956e004ea33136aab3301e5bf296946f
     int encontrado = iniciarSesion(clientes, MAX_CLIENTES);
-    while (encontrado!=0) {
+    if(encontrado!=0){
         printf("Los datos introducidos no son correctos.\n");
         encontrado = iniciarSesion(clientes,MAX_CLIENTES);
+    }else if(encontrado==0){
+        printf("Estas dentro!\n");
+    imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numTarjetas);
     }
+<<<<<<< HEAD
+       
+=======
     printf("Estas dentro!\n");
     imprimirMenu(cuentas,transacciones,numTransacciones,tarjetas,numeroTarjetas, clientes[0]);
+>>>>>>> 5992b6e5956e004ea33136aab3301e5bf296946f
     return 0;
 }
 

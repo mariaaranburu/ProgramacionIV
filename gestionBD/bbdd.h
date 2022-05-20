@@ -18,5 +18,8 @@ int cuantasTarjetas(sqlite3 *db);
 int cuantosTitulares(sqlite3 *db);
 int cuantasTransacciones(sqlite3 *db);
 Accion* listaAcciones(sqlite3* db, Cliente* clientes);
+Transaccion* listaTransacciones(sqlite3* db,CuentaCorriente* cuentas, int numCuentas);
+CuentaCorriente* buscar(int numCC, CuentaCorriente* cuentas, int numCuentas);
+Cliente* buscarCliente(int dniBuscado, Cliente* clientes, int numClientes);
 
 #endif
