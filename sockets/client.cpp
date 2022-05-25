@@ -88,7 +88,7 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Send an initial buffer
-    //1
+    //1: El cliente se ha conectado!
     iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -99,18 +99,20 @@ int __cdecl main(int argc, char **argv)
 
     //printf("Bytes Sent: %ld\n", iResult);
      
-    
-    //HEMEN EGIN BEHAR DA GUZTIA
     // Receive until the peer closes the connection
     do {
-        /*//1.1. Mandar nombre de usuario
-        char* mensaje;
-        iResult = recv(ConnectSocket, mensaje, (int)strlen(mensaje), 0);
-        cout << mensaje <<endl;
-        char* nombreUsuario;
-        cin >> nombreUsuario;
-        iResult = send(ConnectSocket, nombreUsuario, (int)strlen(nombreUsuario), 0);
-        */
+        //1.1. Mandar DNI
+    
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        char* mensajeDNI = new char[iResult];
+        strcpy(mensajeDNI, recvbuf);
+        mensajeDNI[iResult] = '\0';
+        printf("%s", mensajeDNI);
+        cout << mensajeDNI <<endl;
+        char* dni = new char[15];
+        cin >> dni;
+        iResult = send(ConnectSocket, dni, (int)strlen(dni), 0);
+        
         //2 Recibir opciones menu
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if ( iResult > 0 ) {
