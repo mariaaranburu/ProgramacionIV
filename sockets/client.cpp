@@ -6,6 +6,8 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
+using namespace std;
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -14,7 +16,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "27015"
 
 int __cdecl main(int argc, char **argv) 
@@ -24,7 +26,7 @@ int __cdecl main(int argc, char **argv)
     struct addrinfo *result = NULL,
                     *ptr = NULL,
                     hints;
-    const char *sendbuf = "this is a test\n";
+    const char *sendbuf = "El cliente se ha conectado!\0\n";
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
@@ -86,6 +88,7 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Send an initial buffer
+    //1
     iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -94,7 +97,41 @@ int __cdecl main(int argc, char **argv)
         return 1;
     }
 
-    printf("Bytes Sent: %ld\n", iResult);
+    //printf("Bytes Sent: %ld\n", iResult);
+     
+    
+    //HEMEN EGIN BEHAR DA GUZTIA
+    // Receive until the peer closes the connection
+    do {
+        /*//1.1. Mandar nombre de usuario
+        char* mensaje;
+        iResult = recv(ConnectSocket, mensaje, (int)strlen(mensaje), 0);
+        cout << mensaje <<endl;
+        char* nombreUsuario;
+        cin >> nombreUsuario;
+        iResult = send(ConnectSocket, nombreUsuario, (int)strlen(nombreUsuario), 0);
+        */
+        //2 Recibir opciones menu
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        if ( iResult > 0 ) {
+            //printf("Bytes received: %d\n", iResult);
+            char* newText = new char[iResult];
+            strcpy(newText, recvbuf);
+            newText[iResult] = '\0';
+            printf("%s", newText);
+
+            //3
+            char* opcion = new char[15];
+            cin >> opcion;
+            printf("Opcion seleccionada: %c", opcion);
+            iResult = send(ConnectSocket, opcion, (int)strlen(opcion), 0);
+
+        } else if ( iResult == 0 )
+            printf("Connection closed\n");
+        else
+            printf("recv failed with error: %d\n", WSAGetLastError());
+        
+    } while( iResult > 0 );
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);
@@ -104,19 +141,6 @@ int __cdecl main(int argc, char **argv)
         WSACleanup();
         return 1;
     }
-
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if ( iResult > 0 )
-            printf("Bytes received: %d\n", iResult);
-        else if ( iResult == 0 )
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while( iResult > 0 );
 
     // cleanup
     closesocket(ConnectSocket);
