@@ -178,8 +178,36 @@ int __cdecl main(void)
     return 0;
 }
 
-void limpiarBuffer(char* buffer, int bufferLen) {
-    for (int i=0; i<bufferLen; i++) {
-        buffer[i]=' ';
+/*char* leerFicheroConf(char* fichero) {
+   FILE* f;
+    char c;
+
+	int num_lines = 0;
+
+	//abrir fichero para lectura
+	f = fopen("prueba.txt", "r");
+       
+	//leer mientras no se llegue al final del fichero EOF
+	while ((c = fgetc(f)) != EOF)
+	{
+		if (c == '\n')
+			num_lines++;  
+		putchar(c);
+	}
+	//cerrar fichero
+	fclose(f);
+
+	printf("El fichero tiene %i líneas\n", num_lines);
+}*/
+
+string leerFicheroConf (char* fichero){
+    string line;
+    ifstream file;
+    file.open(fichero);
+    if(file.is_open()){
+        getline(file,line);
+    }else{
+        cout << "No se ha podido abrir el fichero. \n";
     }
+    return line;
 }
