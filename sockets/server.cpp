@@ -21,6 +21,7 @@ using namespace std;
 #define DEFAULT_PORT "27015"
 
 string leerFicheroConf (char* fichero);
+void limpiarBuffer(char* buffer, int bufferLen);
 
 int __cdecl main(void) 
 {
@@ -111,12 +112,15 @@ int __cdecl main(void)
 
         // Echo the buffer back to the sender
         //1.1. Recibir DNI
-        char* mensaje = "Introduce DNI sin letra: ";
+        char* mensaje = "Introduce DNI sin letra: \n";
         iSendResult = send(ClientSocket, mensaje, (int)strlen(mensaje), 0);
 
-        char* dni;
-        iResult = recv(ClientSocket, dni, (int)strlen(dni), 0);
-        cout << "DNI recibido: " << dni;
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* dni = new char[iResult];
+        strcpy(dni, recvbuf);
+        newText[iResult] = '\0';
+        //limpiarBuffer(recvbuf, recvbuflen);
+        printf("DNI recibido: %s\n", dni);
 
         //2
         sendbuf = "Elige una opcion: \n a. Ver cuenta\n b. Hacer transaccion\n 'q' para salir\n\0";
@@ -137,6 +141,7 @@ int __cdecl main(void)
                 strcpy(newText, recvbuf);
                 newText[iResult] = '\0';
                 printf("Opcion recibida: %s", newText);
+                limpiarBuffer(recvbuf, recvbuflen);
             }
             
             

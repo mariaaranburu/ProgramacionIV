@@ -108,7 +108,6 @@ int __cdecl main(int argc, char **argv)
         strcpy(mensajeDNI, recvbuf);
         mensajeDNI[iResult] = '\0';
         printf("%s", mensajeDNI);
-        cout << mensajeDNI <<endl;
         char* dni = new char[15];
         cin >> dni;
         iResult = send(ConnectSocket, dni, (int)strlen(dni), 0);
