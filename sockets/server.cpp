@@ -21,7 +21,7 @@ using namespace std;
 #define DEFAULT_PORT "27015"
 
 string leerFicheroConf (char* fichero);
-void limpiarBuffer(char* buffer, int bufferLen);
+//void limpiarBuffer(char* buffer, int bufferLen);
 
 int __cdecl main(void) 
 {
@@ -37,6 +37,7 @@ int __cdecl main(void)
     char* recvbuf = new char[DEFAULT_BUFLEN];
     char* sendbuf = new char[DEFAULT_BUFLEN];
     int recvbuflen = DEFAULT_BUFLEN;
+    char* recvbuf1 = new char[DEFAULT_BUFLEN];
     
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -115,9 +116,9 @@ int __cdecl main(void)
         char* mensaje = "Introduce DNI sin letra: \n";
         iSendResult = send(ClientSocket, mensaje, (int)strlen(mensaje), 0);
 
-        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        iResult = recv(ClientSocket, recvbuf1, recvbuflen, 0);
         char* dni = new char[iResult];
-        strcpy(dni, recvbuf);
+        strcpy(dni, recvbuf1);
         newText[iResult] = '\0';
         //limpiarBuffer(recvbuf, recvbuflen);
         printf("DNI recibido: %s\n", dni);
@@ -141,7 +142,7 @@ int __cdecl main(void)
                 strcpy(newText, recvbuf);
                 newText[iResult] = '\0';
                 printf("Opcion recibida: %s", newText);
-                limpiarBuffer(recvbuf, recvbuflen);
+                //limpiarBuffer(recvbuf, recvbuflen);
             }
             
             

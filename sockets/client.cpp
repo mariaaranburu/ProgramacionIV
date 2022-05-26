@@ -124,7 +124,6 @@ int __cdecl main(int argc, char **argv)
             //3
             char* opcion = new char[15];
             cin >> opcion;
-            printf("Opcion seleccionada: %c", opcion);
             iResult = send(ConnectSocket, opcion, (int)strlen(opcion), 0);
 
         } else if ( iResult == 0 )
