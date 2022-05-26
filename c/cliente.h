@@ -7,10 +7,10 @@ typedef struct {
     char* fec_nac;
     char* sexo;
     char* contrasenya;
-} Cliente;
+} Cliente_;
 
-void imprimirCliente (Cliente c);
+void imprimirCliente (Cliente_ c);
 
-Cliente* buscarElCliente(int dniBuscado, Cliente* clientes, int numClientes);
+Cliente_* buscarElCliente(int dniBuscado, Cliente_* clientes, int numClientes);
 
 #endif

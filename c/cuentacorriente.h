@@ -6,18 +6,18 @@ typedef struct {
     int numero;
     float saldo;
     Cliente *cliente;
-} CuentaCorriente;
+} Cuenta_Corriente;
 
-void imprimirCuenta(CuentaCorriente *c);
+void imprimirCuenta(Cuenta_Corriente *c);
 
-CuentaCorriente cogerCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int numeroCuenta);
+Cuenta_Corriente cogerCuenta(Cuenta_Corriente* listadoCuentas, int numeroCuentas, int numeroCuenta);
 
-void accederASaldoCuenta(CuentaCorriente* listadoCuentas, int numeroCuentas, int numeroCuenta, float modificacion, char tipo);
+void accederASaldoCuenta(Cuenta_Corriente* listadoCuentas, int numeroCuentas, int numeroCuenta, float modificacion, char tipo);
 
-CuentaCorriente* buscarCC(int numCC, CuentaCorriente* cuentas, int numCuentas);
+Cuenta_Corriente* buscarCC(int numCC, Cuenta_Corriente* cuentas, int numCuentas);
 
-CuentaCorriente* buscarCC_Cliente(int dni, int numCuentas, CuentaCorriente* cuentas);
+Cuenta_Corriente* buscarCC_Cliente(int dni, int numCuentas, Cuenta_Corriente* cuentas);
 
-int cuentasCC_dni (int dni, int numCuentas, CuentaCorriente* cuentas);
+int cuentasCC_dni (int dni, int numCuentas, Cuenta_Corriente* cuentas);
 
 #endif

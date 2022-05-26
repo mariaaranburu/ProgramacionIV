@@ -10,10 +10,11 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
-#include "../c++/usuario.h"
+//#include "../c++/usuario.h"
 #include "../c++/cliente.h"
 #include "../c++/cuentacorriente.h"
 #include "../gestionBD/bbdd.h"
+#include "../gestionBD/sqlite3.h"
 using namespace std;
 
 // Need to link with Ws2_32.lib
@@ -57,7 +58,8 @@ int __cdecl main(void)
     char* f_pathBD = new char[DEF];
     f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
     sqlite3 *db;
-    int result = sqlite3_open(f_pathBD, &db);
+    //int result_bd = sqlite3_open(f_pathBD, &db);
+    //int result_bd = sqlite3_open("bbdd.sqlite", &db);
 
     
     // Initialize Winsock
@@ -306,7 +308,6 @@ char* leerFicheroConf (string fichero){
 				break;
             
             c[i] = ch;
-			cout << ch;
             i++;
 		}
 

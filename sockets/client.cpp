@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 
@@ -22,12 +23,14 @@ using namespace std;
 
 char* leerFicheroConf (string fichero);
 
-int __cdecl main(int argc, char **argv) 
+int __cdecl main() 
 {
-    char* f_puerto = new char[DEF];
     char* f_dirIP = new char[DEF];
-    f_puerto = leerFicheroConf("../ficheros/puertos.txt");
+    char* f_puerto = new char[DEF];
+    
     f_dirIP = leerFicheroConf("../ficheros/direccion_IP.txt");
+    f_puerto = leerFicheroConf("../ficheros/puertos.txt");
+    
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
@@ -203,4 +206,30 @@ int __cdecl main(int argc, char **argv)
     WSACleanup();
 
     return 0;
+}
+
+char* leerFicheroConf (string fichero){
+    char* c = new char[DEF];
+    int i = 0;
+    fstream my_file;
+	my_file.open(fichero, ios::in);
+	if (!my_file) {
+		cout << "No such file";
+	}
+	else {
+		char ch;
+
+		while (1) {
+			my_file >> ch;
+			if (my_file.eof())
+				break;
+            
+            c[i] = ch;
+            i++;
+		}
+
+	}
+    cout << c <<endl;
+	my_file.close();
+    return c;
 }
