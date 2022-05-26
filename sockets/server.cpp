@@ -9,7 +9,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
+
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -18,6 +20,8 @@ using namespace std;
 #define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "27015"
 
+string leerFicheroConf (char* fichero);
+void limpiarBuffer(char* buffer, int bufferLen);
 
 int __cdecl main(void) 
 {
@@ -98,22 +102,25 @@ int __cdecl main(void)
 
     // Receive until the peer shuts down the connection
     do {
-        //HEMEN EGIN BEHAR DA GUZTIA!!!!!!
-        //1
+        //1: El cliente se ha conectado!
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
-            //printf("Bytes received: %d\n", iResult);
-            printf("%s\n", recvbuf);
+            char* newText = new char[iResult];
+            strcpy(newText, recvbuf);
+            newText[iResult] = '\0';
+            printf("%s\n", newText);
 
         // Echo the buffer back to the sender
-        /*//1.1. Recibir nombre de usuario
-        char* mensaje = "Introduce tu nombre de usuario: ";
+        //1.1. Recibir DNI
+        char* mensaje = "Introduce DNI sin letra: \n";
         iSendResult = send(ClientSocket, mensaje, (int)strlen(mensaje), 0);
 
-        char* nombreUsuario;
-        iResult = recv(ClientSocket, nombreUsuario, (int)strlen(nombreUsuario), 0);
-        cout << "Nombre de usuario recibido: " << nombreUsuario;
-        */
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* dni = new char[iResult];
+        strcpy(dni, recvbuf);
+        newText[iResult] = '\0';
+        //limpiarBuffer(recvbuf, recvbuflen);
+        printf("DNI recibido: %s\n", dni);
 
         //2
         sendbuf = "Elige una opcion: \n a. Ver cuenta\n b. Hacer transaccion\n 'q' para salir\n\0";
@@ -134,6 +141,7 @@ int __cdecl main(void)
                 strcpy(newText, recvbuf);
                 newText[iResult] = '\0';
                 printf("Opcion recibida: %s", newText);
+                limpiarBuffer(recvbuf, recvbuflen);
             }
             
             
@@ -168,4 +176,10 @@ int __cdecl main(void)
     WSACleanup();
 
     return 0;
+}
+
+void limpiarBuffer(char* buffer, int bufferLen) {
+    for (int i=0; i<bufferLen; i++) {
+        buffer[i]=' ';
+    }
 }
