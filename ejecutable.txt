@@ -1,1 +1,7 @@
 gcc gestionBD\bbdd.c gestionBD\sqlite3.c logicaDeDatos\ficheros.c logicaDeNegocio\accion.c logicaDeNegocio\cliente.c logicaDeNegocio\cuentacorriente.c logicaDeNegocio\main.c logicaDeNegocio\menu.c logicaDeNegocio\tarjeta.c logicaDeNegocio\transaccion.c -o main.exe
+
+g++ server.cpp -lws2_32 -o server.exe
+
+g++ client.cpp -lws2_32 -o client.exe
+
+client.exe localhost
