@@ -1,6 +1,6 @@
 #ifndef _CUENTA_CORRIENTE_H_
 #define _CUENTA_CORRIENTE_H_
-#include "../logicaDeNegocio/cliente.h"
+#include "../c/cliente.h"
 
 typedef struct {
     int numero;

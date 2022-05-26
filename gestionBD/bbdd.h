@@ -1,14 +1,12 @@
 #ifndef _BBDD_H_
 #define _BBDD_H_
 #include "sqlite3.h"
-#include "../logicaDeNegocio/cliente.h"
-#include "../logicaDeNegocio/accion.h"
-#include "../logicaDeNegocio/cuentacorriente.h"
-#include "../logicaDeNegocio/tarjeta.h"
-#include "../logicaDeNegocio/transaccion.h"
+#include "../c/cliente.h"
+#include "../c/accion.h"
+#include "../c/cuentacorriente.h"
+#include "../c/tarjeta.h"
+#include "../c/transaccion.h"
 
-int open(sqlite3 *db);
-int close(sqlite3 *db);
 int cuantasAcciones(sqlite3 *db);
 int cuantosClientes(sqlite3 *db);
 Cliente* cogerClientes (sqlite3 *db);

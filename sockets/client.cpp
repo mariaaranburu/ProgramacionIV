@@ -26,7 +26,7 @@ int __cdecl main(int argc, char **argv)
     struct addrinfo *result = NULL,
                     *ptr = NULL,
                     hints;
-    const char *sendbuf = "El cliente se ha conectado!\0\n";
+    const char *sendbuf = "¡El cliente se ha conectado!\0\n";
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
@@ -101,8 +101,7 @@ int __cdecl main(int argc, char **argv)
      
     // Receive until the peer closes the connection
     do {
-        //1.1. Mandar DNI
-    
+        //1.1. Enviar DNI
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         char* mensajeDNI = new char[iResult];
         strcpy(mensajeDNI, recvbuf);
@@ -112,6 +111,17 @@ int __cdecl main(int argc, char **argv)
         cin >> dni;
         iResult = send(ConnectSocket, dni, (int)strlen(dni), 0);
         
+        //1.2. Enviar contrasenya
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        char* mensajeContrasenya = new char[iResult];
+        strcpy(mensajeContrasenya, recvbuf);
+        mensajeContrasenya[iResult] = '\0';
+        printf("%s", mensajeContrasenya);
+        char* contrasenya = new char[15];
+        cin >> contrasenya;
+        iResult = send(ConnectSocket, contrasenya, (int)strlen(contrasenya), 0);
+        
+
         //2 Recibir opciones menu
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if ( iResult > 0 ) {
@@ -121,10 +131,54 @@ int __cdecl main(int argc, char **argv)
             newText[iResult] = '\0';
             printf("%s", newText);
 
-            //3
+            //3 Enviar opcion
             char* opcion = new char[15];
             cin >> opcion;
             iResult = send(ConnectSocket, opcion, (int)strlen(opcion), 0);
+            if (iResult == SOCKET_ERROR) {
+                printf("send failed with error: %d\n", WSAGetLastError());
+                closesocket(ConnectSocket);
+                WSACleanup();
+                return 1;
+            }
+
+            if (opcion=="s" || opcion=="S") {
+                //4 Enviar datos nueva transferencia
+                //4.1.
+                iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+                char* mensajeDestino = new char[iResult];
+                strcpy(mensajeDestino, recvbuf);
+                mensajeDestino[iResult] = '\0';
+                printf("%s", mensajeDestino);
+                char* destino = new char[15];
+                cin >> destino;
+                iResult = send(ConnectSocket, destino, (int)strlen(destino), 0);
+            
+                //4.2.
+                iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+                char* mensajeImporte = new char[iResult];
+                strcpy(mensajeImporte, recvbuf);
+                mensajeImporte[iResult] = '\0';
+                printf("%s", mensajeImporte);
+                char* importe = new char[15];
+                cin >> importe;
+                iResult = send(ConnectSocket, importe, (int)strlen(importe), 0);
+
+                //4.3.
+                iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+                char* mensajeDescripcion = new char[iResult];
+                strcpy(mensajeDescripcion, recvbuf);
+                mensajeDestino[iResult] = '\0';
+                printf("%s", mensajeDescripcion);
+                char* descripcion = new char[15];
+                cin >> descripcion;
+                iResult = send(ConnectSocket, descripcion, (int)strlen(descripcion), 0);
+
+
+            }
+           
+
+
 
         } else if ( iResult == 0 )
             printf("Connection closed\n");

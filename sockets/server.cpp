@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include "../c++/usuario.h"
+#include "../c++/cliente.h"
+#include "../c++/cuentacorriente.h"
+#include "../gestionBD/bbdd.h"
 using namespace std;
 
 
@@ -18,9 +22,11 @@ using namespace std;
 // #pragma comment (lib, "Mswsock.lib")
 
 #define DEFAULT_BUFLEN 1024
+#define DEF 100
 #define DEFAULT_PORT "27015"
 
-string leerFicheroConf (char* fichero);
+char* leerFicheroConf (string fichero);
+
 //void limpiarBuffer(char* buffer, int bufferLen);
 
 int __cdecl main(void) 
@@ -38,6 +44,22 @@ int __cdecl main(void)
     char* sendbuf = new char[DEFAULT_BUFLEN];
     int recvbuflen = DEFAULT_BUFLEN;
     char* recvbuf1 = new char[DEFAULT_BUFLEN];
+    char* recvbuf2 = new char[DEFAULT_BUFLEN];
+    char* recvbuf3 = new char[DEFAULT_BUFLEN];
+    char* recvbuf4 = new char[DEFAULT_BUFLEN];
+    char* recvbuf5 = new char[DEFAULT_BUFLEN];
+    char* recvbuf6 = new char[DEFAULT_BUFLEN];
+    char* recvbuf7 = new char[DEFAULT_BUFLEN];
+    char* recvbuf8 = new char[DEFAULT_BUFLEN];
+    char* recvbuf9 = new char[DEFAULT_BUFLEN];
+    char* recvbuf10 = new char[DEFAULT_BUFLEN];
+
+
+    char* f_pathBD = new char[DEF];
+    f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
+    sqlite3 *db;
+    int result = sqlite3_open(f_pathBD, &db);
+
     
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -53,7 +75,13 @@ int __cdecl main(void)
     hints.ai_flags = AI_PASSIVE;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    char* f_puerto = new char[DEF];
+    char* f_dirIP = new char[DEF];
+    
+    f_puerto = leerFicheroConf("../ficheros/puertos.txt");
+    f_dirIP = leerFicheroConf("../ficheros/direccion_IP.txt");
+    f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
+    iResult = getaddrinfo(NULL, f_puerto, &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -123,8 +151,24 @@ int __cdecl main(void)
         //limpiarBuffer(recvbuf, recvbuflen);
         printf("DNI recibido: %s\n", dni);
 
+        //1.2. Recibir contrasenya
+        char* mensaje2 = "Introduce tu contrasenya: \n";
+        iSendResult = send(ClientSocket, mensaje2, (int)strlen(mensaje2), 0);
+
+        iResult = recv(ClientSocket, recvbuf2, recvbuflen, 0);
+        char* contrasenya = new char[iResult];
+        strcpy(contrasenya, recvbuf2);
+        newText[iResult] = '\0';
+        //limpiarBuffer(recvbuf, recvbuflen);
+        printf("Contrasenya recibida: %s\n", contrasenya);
+        
+        //COMPROBAR DNI Y CONTRASENYA CORRECTOS
+       
         //2
-        sendbuf = "Elige una opcion: \n a. Ver cuenta\n b. Hacer transaccion\n 'q' para salir\n\0";
+        //Cliente* cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
+        //CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);
+        //metodo polimorfico
+        sendbuf = "¡Hola %s! \n Tu saldo es: %i\n ¿Quieres hacer alguna transferencia? s/n\n  'q' para salir\n\0", "Malen", 200000;
         iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
             if (iSendResult == SOCKET_ERROR) {
                 printf("send failed with error: %d\n", WSAGetLastError());
@@ -143,6 +187,76 @@ int __cdecl main(void)
                 newText[iResult] = '\0';
                 printf("Opcion recibida: %s", newText);
                 //limpiarBuffer(recvbuf, recvbuflen);
+            }
+
+            if(newText=="s" || newText=="S") {
+                
+                //4
+                //Pedir datos nueva transferencia
+                    //4.1.
+                sendbuf = "Introduce CC destino: \n\0";
+                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+                if (iSendResult == SOCKET_ERROR) {
+                    printf("send failed with error: %d\n", WSAGetLastError());
+                    closesocket(ClientSocket);
+                    WSACleanup();
+                    return 1;
+                }
+                printf("Text sent: %s\n", sendbuf);
+                iResult = recv(ClientSocket, recvbuf3, recvbuflen, 0);
+                if (iResult>0) {
+                    char* ccDestino = new char[iResult];
+                    strcpy(ccDestino, recvbuf3);
+                    ccDestino[iResult] = '\0';
+                    printf("CC destino recibida: %s", ccDestino);
+                }
+
+
+                    //4.2.
+                sendbuf = "Introduce importe: \n\0";
+                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+                if (iSendResult == SOCKET_ERROR) {
+                    printf("send failed with error: %d\n", WSAGetLastError());
+                    closesocket(ClientSocket);
+                    WSACleanup();
+                    return 1;
+                }
+                printf("Text sent: %s\n", sendbuf);
+                iResult = recv(ClientSocket, recvbuf4, recvbuflen, 0);
+                if (iResult>0) {
+                    char* importe = new char[iResult];
+                    strcpy(importe, recvbuf4);
+                    importe[iResult] = '\0';
+                    printf("Importe recibido: %s", importe);
+                }
+
+            
+                    //4.3.
+                sendbuf = "Introduce descripcion: \n\0";
+                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+                if (iSendResult == SOCKET_ERROR) {
+                    printf("send failed with error: %d\n", WSAGetLastError());
+                    closesocket(ClientSocket);
+                    WSACleanup();
+                    return 1;
+                }
+                printf("Text sent: %s\n", sendbuf);
+
+                printf("Text sent: %s\n", sendbuf);
+                iResult = recv(ClientSocket, recvbuf5, recvbuflen, 0);
+                if (iResult>0) {
+                    char* descripcion = new char[iResult];
+                    strcpy(descripcion, recvbuf5);
+                    descripcion[iResult] = '\0';
+                    printf("Importe recibido: %s", descripcion);
+                }
+
+            } else if (newText=="n" || newText=="N") {
+                //NO HACE TRANSFERENCIA
+
+            }else{
+                //ERROR, LAS LETRAS TIENEN QUE SER S O N
+                printf("Error, las letras tienen que ser s o n, se procede a la salida\n");
             }
             
             
@@ -179,36 +293,29 @@ int __cdecl main(void)
     return 0;
 }
 
-/*char* leerFicheroConf(char* fichero) {
-   FILE* f;
-    char c;
 
-	int num_lines = 0;
-
-	//abrir fichero para lectura
-	f = fopen("prueba.txt", "r");
-       
-	//leer mientras no se llegue al final del fichero EOF
-	while ((c = fgetc(f)) != EOF)
-	{
-		if (c == '\n')
-			num_lines++;  
-		putchar(c);
+char* leerFicheroConf (string fichero){
+    char* c = new char[DEF];
+    int i = 0;
+    fstream my_file;
+	my_file.open(fichero, ios::in);
+	if (!my_file) {
+		cout << "No such file";
 	}
-	//cerrar fichero
-	fclose(f);
+	else {
+		char ch;
 
-	printf("El fichero tiene %i líneas\n", num_lines);
-}*/
+		while (1) {
+			my_file >> ch;
+			if (my_file.eof())
+				break;
+            
+            c[i] = ch;
+			cout << ch;
+            i++;
+		}
 
-string leerFicheroConf (char* fichero){
-    string line;
-    ifstream file;
-    file.open(fichero);
-    if(file.is_open()){
-        getline(file,line);
-    }else{
-        cout << "No se ha podido abrir el fichero. \n";
-    }
-    return line;
+	}
+	my_file.close();
+    return c;
 }
