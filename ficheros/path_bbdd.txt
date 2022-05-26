@@ -1,1 +1,1 @@
-../bbdd.sqlite
+bbdd.sqlite
