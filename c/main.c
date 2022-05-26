@@ -5,8 +5,6 @@
 #include"tarjeta.h"
 #include "cliente.h"
 #include "..\gestionBD\bbdd.h"
-#include "..\gestionBD\bbdd.h"
-#include "..\logicaDeDatos\ficheros.h"
 #define MAX_CLIENTES 10
 #define MAX_GENERAL 10*MAX_CLIENTES
 #define MAX_CHAR 30
