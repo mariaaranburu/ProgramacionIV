@@ -8,6 +8,7 @@ class Administrador: public Usuario
         char* cargo;
     
     public:
+        Administrador(char* nombre, char* contrasenya);
         Administrador(char* nombre, char* contrasenya, char* cargo);
         ~Administrador();
 

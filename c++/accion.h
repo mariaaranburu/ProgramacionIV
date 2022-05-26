@@ -17,6 +17,8 @@ class Accion
 		Accion(); 
 		//constructor con parametros
 		Accion(int num_valor, float prec_actual, float prec_compra, char* empresa, int dni_cliente);
+		//constructor copia
+		Accion(const Accion &a);
 		//destructor
 		~Accion();
 

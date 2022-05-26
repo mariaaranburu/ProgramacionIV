@@ -18,9 +18,17 @@ using namespace std;
 
 #define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "27015"
+#define DEF 100
+
+char* leerFicheroConf (string fichero);
 
 int __cdecl main(int argc, char **argv) 
 {
+    char* f_puerto = new char[DEF];
+    char* f_dirIP = new char[DEF];
+    f_puerto = leerFicheroConf("../ficheros/puertos.txt");
+    f_dirIP = leerFicheroConf("../ficheros/direccion_IP.txt");
+
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
@@ -30,12 +38,7 @@ int __cdecl main(int argc, char **argv)
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
-    
-    // Validate the parameters
-    if (argc != 2) {
-        printf("usage: %s server-name\n", argv[0]);
-        return 1;
-    }
+
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -50,7 +53,7 @@ int __cdecl main(int argc, char **argv)
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(f_dirIP, f_puerto, &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -173,12 +176,11 @@ int __cdecl main(int argc, char **argv)
                 char* descripcion = new char[15];
                 cin >> descripcion;
                 iResult = send(ConnectSocket, descripcion, (int)strlen(descripcion), 0);
+            }       
 
-
-            }
-           
-
-
+             if (opcion=="n" || opcion=="N")  {
+                  printf("De acuerdo, no haremos la transferencia");
+             }  
 
         } else if ( iResult == 0 )
             printf("Connection closed\n");

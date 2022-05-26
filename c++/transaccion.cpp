@@ -1,5 +1,7 @@
 #include "transaccion.h"
-//namespace ?
+//namespace c++
+
+using namespace std;
 
 Transaccion:: Transaccion(int num, float importe, char* descripcion, CuentaCorriente* origen, CuentaCorriente* destino)
 {
@@ -48,5 +50,16 @@ CuentaCorriente* Transaccion::getDestino() const{
 }
 
 void Transaccion::imprimirTransaccion(Transaccion t){
+	//cout << "Num: "<<(t.getNum())<<endl;
+	cout << "Importe: "<<t.getImporte()<<endl;
+	cout << "Descripcion: "<<t.getDescripcion()<<endl;
+	cout << "Cuenta origen: "<<t.getOrigen()->getNumero()<<endl;
+	cout << "Cuenta destino: "<<t.getDestino()->getNumero()<<endl;
+}
 
+void Transaccion::hacerTransaccion(CuentaCorriente o, CuentaCorriente d, float importe){
+	float saldo_o = o.getSaldo() - importe;
+	o.setSaldo(saldo_o);
+	float saldo_d = d.getSaldo() + importe;
+	d.setSaldo(saldo_d);
 }

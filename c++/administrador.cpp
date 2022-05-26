@@ -5,6 +5,11 @@
 
 using namespace std;
 
+Administrador::Administrador(char* nombre, char* contrasenya):Usuario(nombre, contrasenya)
+{
+    
+}
+
 Administrador::Administrador(char* nombre, char* contrasenya, char* cargo):Usuario(nombre, contrasenya)
 {
     this->cargo = new char[strlen(cargo)+1];

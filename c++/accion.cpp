@@ -3,6 +3,7 @@
 using namespace std;
 //namespace ?
 
+//constructor con parametros
 Accion:: Accion(int num_valor, float prec_actual, float prec_compra, char* empresa, int dni_cliente)
 {
 	this->num_valor=num_valor;
@@ -12,6 +13,16 @@ Accion:: Accion(int num_valor, float prec_actual, float prec_compra, char* empre
 	this->dni_cliente=dni_cliente;
 }
 
+//constructor copia
+Accion:: Accion(const Accion &a){
+	this->num_valor=a.num_valor;
+	this->prec_actual=a.prec_actual;
+	this->prec_compra=a.prec_compra;
+	this->empresa=a.empresa;
+	this->dni_cliente=a.dni_cliente;
+}
+
+//destructor
 Accion::~Accion(){
 	//eliminamos las variables que hagamos new 
 }	

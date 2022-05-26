@@ -16,7 +16,6 @@
 #include "../gestionBD/bbdd.h"
 using namespace std;
 
-
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 // #pragma comment (lib, "Mswsock.lib")
@@ -77,10 +76,9 @@ int __cdecl main(void)
     // Resolve the server address and port
     char* f_puerto = new char[DEF];
     char* f_dirIP = new char[DEF];
-    
     f_puerto = leerFicheroConf("../ficheros/puertos.txt");
     f_dirIP = leerFicheroConf("../ficheros/direccion_IP.txt");
-    f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
+
     iResult = getaddrinfo(NULL, f_puerto, &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
@@ -164,7 +162,7 @@ int __cdecl main(void)
         
         //COMPROBAR DNI Y CONTRASENYA CORRECTOS
        
-        //2
+        //2 Enviar opciones menu
         //Cliente* cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
         //CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);
         //metodo polimorfico
@@ -179,7 +177,7 @@ int __cdecl main(void)
             //printf("Bytes sent: %d\n", iSendResult);
             printf("Text sent: %s\n", sendbuf);
 
-            //3
+            //3 Recibir opcion
             iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
             if (iResult>0) {
                 char* newText = new char[iResult];
@@ -189,10 +187,9 @@ int __cdecl main(void)
                 //limpiarBuffer(recvbuf, recvbuflen);
             }
 
+            //si no funciona probar con strcmp(strg1, strg2)==0
             if(newText=="s" || newText=="S") {
-                
-                //4
-                //Pedir datos nueva transferencia
+                //4 Pedir datos nueva transferencia
                     //4.1.
                 sendbuf = "Introduce CC destino: \n\0";
                 iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
@@ -211,7 +208,6 @@ int __cdecl main(void)
                     printf("CC destino recibida: %s", ccDestino);
                 }
 
-
                     //4.2.
                 sendbuf = "Introduce importe: \n\0";
                 iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
@@ -229,7 +225,6 @@ int __cdecl main(void)
                     importe[iResult] = '\0';
                     printf("Importe recibido: %s", importe);
                 }
-
             
                     //4.3.
                 sendbuf = "Introduce descripcion: \n\0";
@@ -242,17 +237,17 @@ int __cdecl main(void)
                 }
                 printf("Text sent: %s\n", sendbuf);
 
-                printf("Text sent: %s\n", sendbuf);
                 iResult = recv(ClientSocket, recvbuf5, recvbuflen, 0);
                 if (iResult>0) {
                     char* descripcion = new char[iResult];
                     strcpy(descripcion, recvbuf5);
                     descripcion[iResult] = '\0';
-                    printf("Importe recibido: %s", descripcion);
+                    printf("Descripcion recibida: %s", descripcion);
                 }
 
             } else if (newText=="n" || newText=="N") {
                 //NO HACE TRANSFERENCIA
+                printf("De acuerdo, no haremos la transferencia");
 
             }else{
                 //ERROR, LAS LETRAS TIENEN QUE SER S O N
@@ -260,8 +255,9 @@ int __cdecl main(void)
             }
             
             
-            //printf("%s", recvbuf);
 
+
+            //printf("%s", recvbuf);
             //iSendResult = send(ClientSocket, recvbuf, iResult, 0);
             
             // shutdown the connection since we're done
@@ -292,7 +288,6 @@ int __cdecl main(void)
 
     return 0;
 }
-
 
 char* leerFicheroConf (string fichero){
     char* c = new char[DEF];
