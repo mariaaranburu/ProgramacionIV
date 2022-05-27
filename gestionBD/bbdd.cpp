@@ -3,9 +3,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "usuario.h"
-#include "cliente.h"
-#include "administrador.h"
+#include "../c++/usuario.h"
+#include "../c++/cliente.h"
+#include "../c++/administrador.h"
 
 using namespace std;
 
@@ -37,7 +37,7 @@ int cuantosUsuarios(sqlite3* db)
     return numFilas;
 }
 
-Usuario** devolverUsu(sqlite3* db)
+Usuario** listaUsuarios(sqlite3* db)
 {
     sqlite3_stmt* stmt;
     char sql[] = "select * from CLIENTE";
