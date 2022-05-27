@@ -1,5 +1,5 @@
-#ifndef TARJETA_H_
-#define TARJETA_H_
+#ifndef TARJETA__H_
+#define TARJETA__H_
 
 //namespace c++
 class Tarjeta

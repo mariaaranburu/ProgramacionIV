@@ -1,5 +1,5 @@
-#include "administrador.h"
-#include "usuario.h"
+#include "administrador_.h"
+#include "usuario_.h"
 #include <iostream>
 #include <string.h>
 

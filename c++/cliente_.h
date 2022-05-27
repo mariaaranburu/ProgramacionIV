@@ -1,6 +1,7 @@
-#ifndef CLIENTE_H_
-#define CLIENTE_H_
-#include "usuario.h"
+#ifndef CLIENTE__H_
+#define CLIENTE__H_
+#include "usuario_.h"
+#pragma once
 
 class Cliente: public Usuario
 {

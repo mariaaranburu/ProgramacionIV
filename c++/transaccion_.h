@@ -1,6 +1,6 @@
-#include "cuentacorriente.h"
-#ifndef TRANSACCION_H_
-#define TRANSACCION_H_
+#include "cuentacorriente_.h"
+#ifndef TRANSACCION__H_
+#define TRANSACCION__H_
 
 //namespace c++
 class Transaccion

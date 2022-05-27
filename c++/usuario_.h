@@ -1,5 +1,6 @@
-#ifndef USUARIO_H_
-#define USUSARIO_H_
+#ifndef USUARIO__H_
+#define USUSARIO__H_
+#pragma once
 
 class Usuario
 {

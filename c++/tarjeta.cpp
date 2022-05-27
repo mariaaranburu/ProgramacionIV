@@ -1,4 +1,4 @@
-#include "tarjeta.h"
+#include "tarjeta_.h"
 //namespace ?
 
 Tarjeta:: Tarjeta(int num, int pin, int limite, char* tipo, int numCC)

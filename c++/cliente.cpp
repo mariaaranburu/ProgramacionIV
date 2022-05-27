@@ -1,7 +1,7 @@
-#include "cliente.h"
+#include "cliente_.h"
 #include <iostream>
 #include <string.h>
-#include "usuario.h"
+#include "usuario_.h"
 
 using namespace std;
 

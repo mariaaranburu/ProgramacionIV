@@ -1,6 +1,8 @@
-#ifndef ADMINISTRADOR_H_
-#define ADMINISTRADOR_H_
-#include "usuario.h"
+#ifndef ADMINISTRADOR__H_
+#define ADMINISTRADOR__H_
+#include "usuario_.h"
+#pragma once
+
 
 class Administrador: public Usuario
 {

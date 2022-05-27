@@ -3,9 +3,10 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../c++/usuario.h"
-#include "../c++/cliente.h"
-#include "../c++/administrador.h"
+#include "../c++/usuario_.h"
+#include "../c++/cliente_.h"
+#include "../c++/administrador_.h"
+#include "sqlite3.h"
 
 using namespace std;
 
@@ -73,7 +74,10 @@ Usuario** listaUsuariosf(sqlite3* db)
                 int tamFec_nac = strlen((char*)sqlite3_column_text(stmt, 2));
                 char* fec_nac = new char[tamFec_nac+1];
                 fec_nac = (char*)sqlite3_column_text(stmt, 2);
-                char sexo = (char)sqlite3_column_text(stmt, 3);
+                int tamSexo = strlen((char*)sqlite3_column_text(stmt, 3));
+                char* sexoS = new char[tamSexo+1];
+                sexoS = (char*)sqlite3_column_text(stmt, 3);
+                char sexo = sexoS[0];
                 int tamContrasenya = strlen((char*)sqlite3_column_text(stmt, 4));
                 char* contrasenya = new char[tamContrasenya+1];
                 contrasenya = (char*)sqlite3_column_text(stmt, 4);
@@ -129,9 +133,9 @@ int cuantasTransacciones(sqlite3* db)
 
 }
 
-Transaccion** listaTransacciones(sqlite3* db)
-{
+//Transaccion** listaTransacciones(sqlite3* db)
+//{
 
-}
+//}
 
 

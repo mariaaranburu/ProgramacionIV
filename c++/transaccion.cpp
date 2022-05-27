@@ -1,5 +1,5 @@
-#include "transaccion.h"
-//namespace c++
+#include "transaccion_.h"
+#include <iostream>
 
 using namespace std;
 

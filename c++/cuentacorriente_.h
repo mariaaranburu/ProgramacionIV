@@ -1,6 +1,6 @@
-#include "cliente.h"
-#ifndef CUENTACORRIENTE_H_
-#define CUENTACORRIENTE_H_
+#include "cliente_.h"
+#ifndef CUENTACORRIENTE__H_
+#define CUENTACORRIENTE__H_
 
 //namespace c++
 class CuentaCorriente

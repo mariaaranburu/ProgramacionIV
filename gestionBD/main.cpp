@@ -3,9 +3,10 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../c++/usuario.h"
-#include "../c++/cliente.h"
-#include "../c++/cuentacorriente.h"
+#include "../c++/usuario_.h"
+#include "../c++/cliente_.h"
+#include "../c++/cuentacorriente_.h"
+#include "sqlite3.h"
 
 using namespace std;
 

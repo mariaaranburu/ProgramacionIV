@@ -1,5 +1,5 @@
-#include "cuentacorriente.h"
-#include "cliente.h"
+#include "cuentacorriente_.h"
+#include "cliente_.h"
 //namespace ?
 
 CuentaCorriente:: CuentaCorriente(int numero, float saldo, Cliente *cliente)
