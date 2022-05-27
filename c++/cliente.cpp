@@ -5,6 +5,13 @@
 
 using namespace std;
 
+Cliente:: Cliente():Usuario(){
+	this->dni=0;
+	this->fec_nac=NULL;
+	this->sexo=NULL;
+
+}
+
 Cliente:: Cliente(int dni, char* nombre, char* fec_nac, char sexo, char* contrasenya):Usuario(nombre, contrasenya)
 {
 	this->dni=dni;

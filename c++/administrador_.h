@@ -10,8 +10,14 @@ class Administrador: public Usuario
         char* cargo;
     
     public:
+        //Constructor vacio
+        Administrador();
+
+        //Constructor con parametros
         Administrador(char* nombre, char* contrasenya);
         Administrador(char* nombre, char* contrasenya, char* cargo);
+
+        //Destructor
         ~Administrador();
 
         char* getCargo();

@@ -9,7 +9,14 @@ class Usuario
         char* contrasenya;
 
     public:
+
+        //constructor vacio
+        Usuario();
+
+        //constructor con parametros
         Usuario(char* nombre, char* contrasenya);
+
+        //destructor
         ~Usuario();
 
         char* getNombre();

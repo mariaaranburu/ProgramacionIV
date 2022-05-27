@@ -11,6 +11,8 @@ class Cliente: public Usuario
     	char sexo;
 
 	public:
+		//constructor vacio
+		Cliente();
 		//constructor con parametros
 		Cliente(int dni, char* nombre, char* fec_nac, char sexo, char* contrasenya);
 		//destructor

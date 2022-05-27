@@ -5,6 +5,10 @@
 
 using namespace std;
 
+Administrador::Administrador():Usuario(){
+    this->cargo=NULL;
+}
+
 Administrador::Administrador(char* nombre, char* contrasenya):Usuario(nombre, contrasenya)
 {
     

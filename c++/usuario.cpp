@@ -4,6 +4,12 @@
 
 using namespace std;
 
+
+Usuario::Usuario(){
+    this->nombre=NULL;
+    this->contrasenya=NULL;
+}
+
 Usuario::Usuario(char* nombre, char* contrasenya)
 {
     this->nombre = new char[strlen(nombre)+1];
