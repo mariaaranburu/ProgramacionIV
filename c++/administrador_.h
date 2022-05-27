@@ -14,8 +14,8 @@ class Administrador: public Usuario
         Administrador();
 
         //Constructor con parametros
-        Administrador(char* nombre, char* contrasenya);
-        Administrador(char* nombre, char* contrasenya, char* cargo);
+        Administrador(int dni, char* contrasenya);
+        Administrador(int dni, char* contrasenya, char* cargo);
 
         //Destructor
         ~Administrador();

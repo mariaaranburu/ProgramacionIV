@@ -14,12 +14,14 @@
 // Link with ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 100
 #define DEFAULT_PORT 27015
 
 void clienteConectado(SOCKET ConnectSocket);
 void inicioSesion_dni(int iResult, SOCKET ConnectSocket);
 void inicioSesion_contra(int iResult, SOCKET ConnectSocket);
+void menuAdmin(SOCKET ConnectSocket);
+void crearCliente(SOCKET ConnectSocket);
 
 using namespace std;
 
@@ -67,10 +69,30 @@ int main (void){
         WSACleanup();
         return 1;
     }
+    //1
     clienteConectado(ConnectSocket);
+    //2
     inicioSesion_dni(iResult,ConnectSocket);
+    //3
     inicioSesion_contra(iResult,ConnectSocket);
-    menuSaldo(ConnectSocket);
+    //4.1: IDENTIFICAR TIPO DE USUARIO
+    iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+    char* tipoUsuario = new char[iResult];
+    strcpy(tipoUsuario, recvbuf);
+    tipoUsuario[iResult] = '\0';
+    if ((int)tipoUsuario == 1) {
+        //Cliente
+        menuSaldo(ConnectSocket);
+
+    } else if ((int)tipoUsuario == -1) {
+        //Administrador
+        menuAdmin(ConnectSocket);
+        crearCliente(ConnectSocket);
+    } else {
+        cout << "Los datos introducidos no son correctos. Hasta pronto." << endl;
+    }
+
+    //5
 
     // Receive until the peer closes the connection
     /*do {
@@ -175,6 +197,7 @@ void menuSaldo(SOCKET ConnectSocket){
     cin>>respuesta;
     iResult = send( ConnectSocket, respuesta, (int)strlen(respuesta), 0 );
 
+    delete[] recvbuf;
     
 }
 
@@ -221,18 +244,22 @@ void menuTransferencia(SOCKET ConnectSocket){
     }
     cout <<descripcion;
     cout <<endl;
+
+    cout <<"La transaccion se ha hecho correctamente."<<endl;
+
+    delete[] recvbuf;
 }
 
 void menuAdmin(SOCKET ConnectSocket){
     //SALUDAR AL ADMIN
-    char recvbuf[DEFAULT_BUFLEN];
+    char recvbuf[DEFAULT_BUFLEN] = "";
     int recvbuflen = DEFAULT_BUFLEN;
-    //RECIBIR NOMBRE
+    //RECIBIR MENSAJE DE HOLA
     int iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-    char* nombre = new char[iResult];
-    strcpy(nombre, recvbuf);
-    nombre[iResult] = '\0';
-    cout<<"Hola" <<nombre<<endl;
+    char* mensaje = new char[iResult];
+    strcpy(mensaje, recvbuf);
+    mensaje[iResult] = '\0';
+    cout<<mensaje<<endl;
 
     cout<<"a) Crear cliente "<<endl;
     cout<<"b) Estadisticas" <<endl;
@@ -246,16 +273,30 @@ void menuAdmin(SOCKET ConnectSocket){
         WSACleanup();
     }
     cout <<endl;
+
+     delete[] recvbuf;
     
 }
 
 void crearCliente(SOCKET ConnectSocket){
+    //Recibir dni
     int iResult;
     cout << "CREAR CLIENTE" <<endl;
     cout << "DNI: ";
     char* dni = new char[MAX];
     cin >> dni;
     iResult = send( ConnectSocket, dni, (int)strlen(dni), 0 );
+    if (iResult == SOCKET_ERROR) {
+        wprintf(L"send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+    }
+    cout <<endl;
+
+    cout << "NOMBRE: ";
+    char* nombre = new char[MAX];
+    cin >> nombre;
+    iResult = send( ConnectSocket, nombre, (int)strlen(nombre), 0 );
     if (iResult == SOCKET_ERROR) {
         wprintf(L"send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
@@ -284,5 +325,17 @@ void crearCliente(SOCKET ConnectSocket){
         WSACleanup();
     }
     cout <<endl;
+
+    cout << "CONTRASENYA: ";
+    char* contra = new char[MAX];
+    cin >> contra;
+    iResult = send( ConnectSocket, contra, (int)strlen(contra), 0 );
+    if (iResult == SOCKET_ERROR) {
+        wprintf(L"send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+    }
+    cout <<endl;
 }
+
 

@@ -28,11 +28,11 @@ Cliente* cogerCliente(Cliente** lista, int dni, sqlite3* db)
     return cliente;
 }
 
-Administrador* cogerAdministrador(Administrador** lista, char* nombre, sqlite3* db)
+Administrador* cogerAdministrador(Administrador** lista, int dni, sqlite3* db)
 {
     Administrador* admin = new Administrador();
     for (int i; i<cuantosUsuarios(db); i++){
-        if ((lista[i]->getNombre())==nombre){
+        if ((lista[i]->getDni())==dni){
             admin = lista[i];
         }
     }
@@ -44,6 +44,17 @@ CuentaCorriente* cogerCC(CuentaCorriente** lista, int num, sqlite3* db)
     CuentaCorriente* cc = new CuentaCorriente();
     for (int i; i<cuantasTransacciones(db); i++){
         if ((lista[i]->getNumero())==num){
+            cc = lista[i];
+        }
+    }
+    return cc;
+}
+
+CuentaCorriente* cogerCCxDNI(CuentaCorriente** lista, int dni, sqlite3* db)
+{
+    CuentaCorriente* cc = new CuentaCorriente();
+    for (int i; i<cuantasCC(db); i++){
+        if ((lista[i]->getCliente()->getDni())==dni){
             cc = lista[i];
         }
     }
@@ -97,14 +108,12 @@ Usuario** listaUsuariosf(sqlite3* db)
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW) {
             if (sqlite3_column_int(stmt, 0)==1111) {
-                int tamNombre = strlen((char*)sqlite3_column_text(stmt, 1));
-                char* nombre = new char[tamNombre+1];
-                nombre = (char*)sqlite3_column_text(stmt, 1);
+                int dni = (int)sqlite3_column_int(stmt, 1);
                 int tamContrasenya = strlen((char*)sqlite3_column_text(stmt, 4));
                 char* contrasenya = new char[tamContrasenya+1];
                 contrasenya = (char*)sqlite3_column_text(stmt, 4);
 
-                Administrador* admin = new Administrador(nombre, contrasenya);
+                Administrador* admin = new Administrador(dni, contrasenya);
                 lista[contador] = admin;
                 contador++;
             } else {

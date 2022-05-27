@@ -5,7 +5,7 @@
 class Usuario
 {
     private:
-        char* nombre;
+        int dni;
         char* contrasenya;
 
     public:
@@ -14,14 +14,14 @@ class Usuario
         Usuario();
 
         //constructor con parametros
-        Usuario(char* nombre, char* contrasenya);
+        Usuario(int dni, char* contrasenya);
 
         //destructor
         ~Usuario();
 
-        char* getNombre();
+        int getDni();
         char* getContrasenya();
-        void setNombre(char* nombre);
+        void setDNI(int dni);
         void setContrasenya(char* contrasenya);
 
         virtual char* diHola();

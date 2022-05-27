@@ -6,7 +6,7 @@
 class Cliente: public Usuario
 {
 	private:
-		int dni;
+		char* nombre;
     	char* fec_nac;
     	char sexo;
 
@@ -18,8 +18,8 @@ class Cliente: public Usuario
 		//destructor
 		~Cliente();
 
-		void setDni(int dni);
-		int getDni() const;
+		void setNombre(char* nombre);
+		char* getNombre() const;
 		void setFec_nac(char* fec_nac);
 		char* getFec_nac() const;
 		void setSexo(char sexo);

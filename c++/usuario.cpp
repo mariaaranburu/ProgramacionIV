@@ -6,16 +6,13 @@ using namespace std;
 
 
 Usuario::Usuario(){
-    this->nombre=NULL;
+    this->dni=0;
     this->contrasenya=NULL;
 }
 
-Usuario::Usuario(char* nombre, char* contrasenya)
+Usuario::Usuario(int dni, char* contrasenya)
 {
-    this->nombre = new char[strlen(nombre)+1];
-        for(int i=0; i<(strlen(nombre)+1); i++){
-            this->nombre[i] = nombre[i];
-        }
+    this->dni = dni;
     
     this->contrasenya = new char[strlen(contrasenya)+1];
         for(int i=0; i<(strlen(contrasenya)+1); i++)
@@ -26,23 +23,22 @@ Usuario::Usuario(char* nombre, char* contrasenya)
 
 Usuario::~Usuario()
 {
-    delete[] nombre;
     delete[] contrasenya;
 }
 
-char* Usuario::getNombre()
-{
-    return nombre;
-}
+ int Usuario::getDni() {
+    return this->dni;
+ }
+
 
 char* Usuario::getContrasenya()
 {
     return contrasenya;
 }
 
-void Usuario::setNombre(char* nombre)
+void Usuario::setDNI(int dni)
 {
-    this->nombre = nombre;
+    this->dni = dni;
 }
 
 void Usuario::setContrasenya(char* contrasenya)

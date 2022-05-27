@@ -9,8 +9,9 @@
 #include "../c++/transaccion_.h"
 
 Cliente* cogerCliente(Cliente** lista, int dni, sqlite3* db);
+CuentaCorriente* cogerCCxDNI(CuentaCorriente** lista, int dni, sqlite3* db);
 
-Administrador* cogerAdministrador(Administrador** lista, char* nombre, sqlite3* db);
+Administrador* cogerAdministrador(Administrador** lista, int dni, sqlite3* db);
 
 CuentaCorriente* cogerCC(CuentaCorriente** lista, int num, sqlite3* db);
 

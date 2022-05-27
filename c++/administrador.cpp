@@ -9,12 +9,12 @@ Administrador::Administrador():Usuario(){
     this->cargo=NULL;
 }
 
-Administrador::Administrador(char* nombre, char* contrasenya):Usuario(nombre, contrasenya)
+Administrador::Administrador(int dni, char* contrasenya):Usuario(dni, contrasenya)
 {
     
 }
 
-Administrador::Administrador(char* nombre, char* contrasenya, char* cargo):Usuario(nombre, contrasenya)
+Administrador::Administrador(int dni, char* contrasenya, char* cargo):Usuario(dni, contrasenya)
 {
     this->cargo = new char[strlen(cargo)+1];
         for(int i=0; i<(strlen(cargo)+1); i++)

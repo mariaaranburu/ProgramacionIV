@@ -6,15 +6,15 @@
 using namespace std;
 
 Cliente:: Cliente():Usuario(){
-	this->dni=0;
+	this->nombre=NULL;
 	this->fec_nac=NULL;
 	this->sexo=NULL;
 
 }
 
-Cliente:: Cliente(int dni, char* nombre, char* fec_nac, char sexo, char* contrasenya):Usuario(nombre, contrasenya)
+Cliente:: Cliente(int dni, char* nombre, char* fec_nac, char sexo, char* contrasenya):Usuario(dni, contrasenya)
 {
-	this->dni=dni;
+	this->nombre=nombre;
 	this->fec_nac = new char[strlen(fec_nac)+1];
 		for(int i=0; i<(strlen(fec_nac)+1); i++)
 		{
@@ -30,14 +30,14 @@ Cliente::~Cliente()
 
 
 //getters y setters
-void Cliente::setDni(int dni)
+void Cliente::setNombre(char* nombre)
 {
-	this->dni=dni;
+	this->nombre=nombre;
 }
 
-int Cliente::getDni() const
+char* Cliente::getNombre() const
 {
-	return this->dni;
+	return this->nombre;
 }
 
 void Cliente::setFec_nac(char* fec_nac)
@@ -84,5 +84,5 @@ char* Cliente::regInicioSesion(const char* fichero)
 
 void Cliente::imprimirCliente (Cliente* c)
 {
-	cout << "DNI: " << c->dni << " Nombre: " << c->getNombre() << " Fecha de nacimiento: " << c->fec_nac << " Sexo: " << c->sexo <<" Contrasenya: " << c->getContrasenya() << endl;
+	cout << "DNI: " << c->getDni() << " Nombre: " << c->getNombre() << " Fecha de nacimiento: " << c->fec_nac << " Sexo: " << c->sexo <<" Contrasenya: " << c->getContrasenya() << endl;
 }

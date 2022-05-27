@@ -23,7 +23,7 @@ using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 // #pragma comment (lib, "Mswsock.lib")
 
-#define DEFAULT_BUFLEN 502
+#define DEFAULT_BUFLEN 100
 #define DEF 100
 #define DEFAULT_PORT "27015"
 
@@ -37,6 +37,11 @@ char* leerFicheroConf (string fichero);
 void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen);
 int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen );
 int recibirContrasenya(SOCKET ClientSocket, char* recvbuf, int recvbuflen );
+int comprobarInicioSesion(int dni, int contrasenya,Cliente** listaCliente, sqlite3* db, Administrador** listaAdmins);
+int menuSaldo(SOCKET ClientSocket, CuentaCorriente* cuenta, Cliente* cliente);
+int recibirCCDestino(SOCKET ClientSocket, char* recvbuf, int recvbuflen);
+int recibirImporte(SOCKET ClientSocket, char* recvbuf, int recvbuflen);
+char* recibirDescripcion(SOCKET ClientSocket, char* recvbuf, int recvbuflen);
 
 
 int __cdecl main(void) 
@@ -53,21 +58,12 @@ int __cdecl main(void)
     char* recvbuf = new char[DEFAULT_BUFLEN];
     char* sendbuf = new char[DEFAULT_BUFLEN];
     int recvbuflen = DEFAULT_BUFLEN;
-    char* recvbuf1 = new char[DEFAULT_BUFLEN];
     char* recvbuf2 = new char[DEFAULT_BUFLEN];
     char* recvbuf3 = new char[DEFAULT_BUFLEN];
-    char* recvbuf4 = new char[DEFAULT_BUFLEN];
-    char* recvbuf5 = new char[DEFAULT_BUFLEN];
-    char* recvbuf6 = new char[DEFAULT_BUFLEN];
-    char* recvbuf7 = new char[DEFAULT_BUFLEN];
-    char* recvbuf8 = new char[DEFAULT_BUFLEN];
-    char* recvbuf9 = new char[DEFAULT_BUFLEN];
-    char* recvbuf10 = new char[DEFAULT_BUFLEN];
 
 
     char* f_pathBD = new char[DEF];
     f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
-    sqlite3 *db;
     //int result_bd = sqlite3_open(f_pathBD, &db);
     //int result_bd = sqlite3_open("bbdd.sqlite", &db);
 
@@ -139,7 +135,7 @@ int __cdecl main(void)
     // No longer need server socket
     closesocket(ListenSocket);
     sqlite3 *db;
-    int result = sqlite3_open("bbdd.sqlite", &db);
+    int res_bd = sqlite3_open("bbdd.sqlite", &db);
     Cliente* cliente = new Cliente;
 
     // Receive until the peer shuts down the connection
@@ -153,114 +149,42 @@ int __cdecl main(void)
         //3: FUNCION RECIBIR CONTRASENYA
         int contra = recibirContrasenya(ClientSocket, recvbuf3, recvbuflen);
 
-        //COMPROBAR DNI Y CONTRASENYA CORRECTOS
-        int inicio;
-        //inicio = funcioComp.
+        //4: COMPROBAR DNI Y CONTRASENYA CORRECTOS
+        Usuario** listaUsuarios = listaUsuariosf(db);
+        int numUsuarios = cuantosUsuarios(db);
+        Cliente** listaCliente = deUsuariosAClientes(listaUsuarios, numUsuarios);
+        Administrador** listaAdmins = deUsuariosAAdmin(listaUsuarios, numUsuarios);
+        int inicio = comprobarInicioSesion(dni, contra, listaCliente, db, listaAdmins);
+        
+        //Depende de lo que sea llamo a una cosa u otra
+        CuentaCorriente** cuentas = listaCC(db);
+        Cliente* cliente = cogerCliente(listaCliente, dni, db);
+        //4.1: IDENTIFICAR TIPO DE USUARIO
+        if (inicio == -1) {
+            sendbuf = "-1";
+        } else if (inicio == 1) {
+            sendbuf = "1";
+        } else {
+            sendbuf = "0";
+        }
+        iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+        
+        //MENUS
         if(inicio == -1){
-
+            //ADMINISTRADOR
+            
         }else if(inicio == 0){
-            cout<<"Las datos introducidos no son correctos. Hasta pronto!";
+            cout<<"El cliente no ha introducido los datos correctos."<<endl;
+            sendbuf = "0";
             //SALIR
         }else if(inicio==1){
-
+            //CLIENTE
+            CuentaCorriente* cc = cogerCCxDNI(cuentas, dni, db);
+            int saldo = menuSaldo(ClientSocket, cc, cliente);
         }
-       
-        //2 Enviar opciones menu
-        /*Cliente *cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
-        CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);*/
-        //metodo polimorfico
         
-        sendbuf = "Hola %s! \n Tu saldo es: %i\n Quieres hacer alguna transferencia? s/n\n  'q' para salir\n\0", "Malen", 200000;
-        iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
-            if (iSendResult == SOCKET_ERROR) {
-                printf("send failed with error: %d\n", WSAGetLastError());
-                closesocket(ClientSocket);
-                WSACleanup();
-                return 1;
-            }
-            //printf("Bytes sent: %d\n", iSendResult);
-            printf("Text sent: %s\n", sendbuf);
 
-            //3 Recibir opcion
-            iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-            char* newText = new char[iResult];
-            if (iResult>0) {
-                strcpy(newText, recvbuf);
-                newText[iResult] = '\0';
-                printf("Opcion recibida: %s", newText);
-            }
-
-            //si no funciona probar con strcmp(strg1, strg2)==0
-            if(newText=="s" || newText=="S") {
-                //4 Pedir datos nueva transferencia
-                    //4.1.
-                sendbuf = "Introduce CC destino: \n\0";
-                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
-                if (iSendResult == SOCKET_ERROR) {
-                    printf("send failed with error: %d\n", WSAGetLastError());
-                    closesocket(ClientSocket);
-                    WSACleanup();
-                    return 1;
-                }
-                printf("Text sent: %s\n", sendbuf);
-                iResult = recv(ClientSocket, recvbuf3, recvbuflen, 0);
-                if (iResult>0) {
-                    char* ccDestino = new char[iResult];
-                    strcpy(ccDestino, recvbuf3);
-                    ccDestino[iResult] = '\0';
-                    printf("CC destino recibida: %s", ccDestino);
-                }
-
-                    //4.2.
-                sendbuf = "Introduce importe: \n\0";
-                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
-                if (iSendResult == SOCKET_ERROR) {
-                    printf("send failed with error: %d\n", WSAGetLastError());
-                    closesocket(ClientSocket);
-                    WSACleanup();
-                    return 1;
-                }
-                printf("Text sent: %s\n", sendbuf);
-                iResult = recv(ClientSocket, recvbuf4, recvbuflen, 0);
-                if (iResult>0) {
-                    char* importe = new char[iResult];
-                    strcpy(importe, recvbuf4);
-                    importe[iResult] = '\0';
-                    printf("Importe recibido: %s", importe);
-                }
-            
-                    //4.3.
-                sendbuf = "Introduce descripcion: \n\0";
-                iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
-                if (iSendResult == SOCKET_ERROR) {
-                    printf("send failed with error: %d\n", WSAGetLastError());
-                    closesocket(ClientSocket);
-                    WSACleanup();
-                    return 1;
-                }
-                printf("Text sent: %s\n", sendbuf);
-
-                iResult = recv(ClientSocket, recvbuf5, recvbuflen, 0);
-                if (iResult>0) {
-                    char* descripcion = new char[iResult];
-                    strcpy(descripcion, recvbuf5);
-                    descripcion[iResult] = '\0';
-                    printf("Descripcion recibida: %s", descripcion);
-                }
-
-            } else if (newText=="n" || newText=="N") {
-                //NO HACE TRANSFERENCIA
-                printf("De acuerdo, no haremos la transferencia");
-
-            }else{
-                //ERROR, LAS LETRAS TIENEN QUE SER S O N
-                printf("Error, las letras tienen que ser s o n, se procede a la salida\n");
-            }
-            
-            //printf("%s", recvbuf);
-            //iSendResult = send(ClientSocket, recvbuf, iResult, 0);
-            
-            // shutdown the connection since we're done
+       
         iResult = shutdown(ClientSocket, SD_SEND);
         if (iResult == SOCKET_ERROR) {
             printf("shutdown failed with error: %d\n", WSAGetLastError());
@@ -328,12 +252,12 @@ void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen)
 //2. Recibir DNI
 int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen ){
     int dni_num;
-        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        char* dni = new char[iResult];
-        strcpy(dni, recvbuf);
-        dni[iResult] = '\0';
-        printf("DNI recibido: %s\n", dni);
-        dni_num = (int)dni;
+    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+    char* dni = new char[iResult];
+    strcpy(dni, recvbuf);
+    dni[iResult] = '\0';
+    printf("DNI recibido: %s\n", dni);
+    dni_num = (int)dni;
     return dni_num;
 }
 
@@ -348,23 +272,22 @@ int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
         printf("Contrasenya recibida: %s\n", contrasenya);
 
         contrasenya_num = (int)contrasenya;
-
         return contrasenya_num;
 }
 
 //4. COMPROBAR DNI Y CONTRASEÑA
-int comprobarInicioSesion(int dni, int contrasenya,Cliente** lista, sqlite3* db){
+int comprobarInicioSesion(int dni, int contrasenya,Cliente** listaCliente, sqlite3* db, Administrador** listaAdmins){
     int dev = 0;
     if(dni==1111){
-        //Administrador* admin = new Administrador();
-        //admin = cogerAdmin(dni);
-        //if(admin->getContrasenya() == contrasenya){
-        /*    dev = -1;
-        }*/
+        Administrador* admin = new Administrador();
+        admin = cogerAdministrador(listaAdmins, dni, db);
+        if((int)admin->getContrasenya() == contrasenya){
+            dev = -1;
+        }
     }else{
         Cliente* cliente = new Cliente();
         //Faltan argumentos
-        cliente = cogerCliente( dni);
+        cliente = cogerCliente( listaCliente, dni, db);
         if((int)cliente->getContrasenya() == contrasenya){
             dev = 1; 
         }
@@ -374,7 +297,8 @@ int comprobarInicioSesion(int dni, int contrasenya,Cliente** lista, sqlite3* db)
 }
 
 //5. MENU SALDO
-int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta, Cliente* cliente) {
+int menuSaldo(SOCKET ClientSocket, CuentaCorriente* cuenta, Cliente* cliente) {
+    //ENVIAR HOLA CLIENTE
     char* sendbuf = new char[DEFAULT_BUFLEN];
     sendbuf =  cuenta->getCliente()->diHola();
     int iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
@@ -385,7 +309,6 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta, Cliente* cliente) {
         return 1;
     }
     //ENVIAR SALDO
-    
     char* sendbuf1 = new char[DEFAULT_BUFLEN];
     sprintf(sendbuf1, "%f",cuenta->getSaldo());
     iSendResult = send( ClientSocket, sendbuf1, (int)strlen(sendbuf1), 0 );
@@ -396,7 +319,7 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta, Cliente* cliente) {
         return 1;
     }
 
-    //3 Recibir opcion
+    // Recibir opcion transaccion si o no 
     char* recvbuf = new char[DEFAULT_BUFLEN];
     int iResult = recv(ClientSocket, recvbuf, DEFAULT_BUFLEN, 0);
     char* opcionRec = new char[iResult];
@@ -406,14 +329,104 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta, Cliente* cliente) {
         printf("Opcion recibida: %s", opcionRec);
     }
     int res = strcmp(opcionRec,"s\0" );
+    //transaccion si
     if(res = 0){
-        //ENTRA MENU TRANSFERENCIAS
+        //ENTRA MENU TRANSACCION
+        int recvbuflen = DEFAULT_BUFLEN;
+        int destino = recibirCCDestino(ClientSocket, recvbuf, recvbuflen);
+        int importe =recibirImporte(ClientSocket, recvbuf, recvbuflen);
+        char* descripcion = recibirDescripcion(ClientSocket, recvbuf, recvbuflen);
+        cout << "Se ha hecho una nueva transaccion";
+        
     }else{
-        //sale
-    }
-            
+        //No hace transaccion, se sale
+        cout<<"El cliente ha salido"<<endl;
+    } 
 }
 
+ //RECIBIR CCDESTINO
+int recibirCCDestino(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
+    int ccdestino;
+        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* destino = new char[iResult];
+        strcpy(destino, recvbuf);
+        destino[iResult] = '\0';
+        printf("CC destino recibido: %s\n", destino);
+        ccdestino = (int)destino;
+    return ccdestino;
+}
 
+//RECIBIR IMPORTE
+int recibirImporte(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
+    int importe;
+        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* imp = new char[iResult];
+        strcpy(imp, recvbuf);
+        imp[iResult] = '\0';
+        printf("Importe recibido: %s\n", imp);
+        importe = (int)imp;
+    return importe;
+}
+
+//RECIBIR DESCRIPCION
+char* recibirDescripcion(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
+    char* descripcion;
+    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+    descripcion = new char[iResult];
+    strcpy(descripcion, recvbuf);
+    descripcion[iResult] = '\0';
+    printf("Descripcion recibida: %s\n", descripcion);
+    return descripcion;
+}
+//ADMIN HOLA
+void menuAdmin(Administrador* admin, SOCKET ClientSocket){
+    char* sendbuf = new char[DEFAULT_BUFLEN];
+    sendbuf = admin->diHola();
+    int iSendResult = send(ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+    
+    char recvbuf[DEFAULT_BUFLEN];
+    int recvbuflen = DEFAULT_BUFLEN;
+    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+    char* opcion = new char[iResult];
+    strcpy(opcion, recvbuf);
+    opcion[iResult] = '\0';
+    char* opA = "a";
+    char* opB = "b";
+
+    if(strcmp(opcion,opA)==0){
+        //Recibir dni
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* dni = new char[iResult];
+        strcpy(dni, recvbuf);
+        dni[iResult] = '\0';
+
+        //Recibir nombre
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* nombre = new char[iResult];
+        strcpy(nombre, recvbuf);
+        nombre[iResult] = '\0';
+
+        //Recibir fec nac
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* fec_nac = new char[iResult];
+        strcpy(fec_nac, recvbuf);
+        fec_nac[iResult] = '\0';
+
+        //Recibir sexo
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* sexo = new char[iResult];
+        strcpy(sexo, recvbuf);
+        sexo[iResult] = '\0';
+
+        //Recibir contrasenya
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        char* contrasenya = new char[iResult];
+        strcpy(contrasenya, recvbuf);
+        contrasenya[iResult] = '\0';
+
+    }else if(strcmp(opcion,opB)==0){
+
+    }
+}
 
 
