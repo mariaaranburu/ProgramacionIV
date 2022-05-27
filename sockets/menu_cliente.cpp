@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "menu_cliente.h"
 #include <iostream>
-#define MAX 30
+#define MAX 15
 
 // Link with ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
@@ -18,8 +18,8 @@
 #define DEFAULT_PORT 27015
 
 void clienteConectado(SOCKET ConnectSocket);
-void inicioSesion_dni(int iResult, SOCKET ConnectSocket);
-void inicioSesion_contra(int iResult, SOCKET ConnectSocket);
+void inicioSesion_dni( SOCKET ConnectSocket);
+void inicioSesion_contra( SOCKET ConnectSocket);
 void menuAdmin(SOCKET ConnectSocket);
 void crearCliente(SOCKET ConnectSocket);
 
@@ -34,7 +34,8 @@ int main (void){
 
     int recvbuflen = DEFAULT_BUFLEN;
     char *sendbuf = "Client: sending data test";
-    char recvbuf[DEFAULT_BUFLEN] = "";
+    char* recvbuf = new char[DEFAULT_BUFLEN];
+
 
     //----------------------
     // Initialize Winsock
@@ -72,10 +73,12 @@ int main (void){
     //1
     clienteConectado(ConnectSocket);
     //2
-    inicioSesion_dni(iResult,ConnectSocket);
+    inicioSesion_dni(ConnectSocket);
     //3
-    inicioSesion_contra(iResult,ConnectSocket);
+    inicioSesion_contra(ConnectSocket);
+    cout<<"Llega aqui";
     //4.1: IDENTIFICAR TIPO DE USUARIO
+    cout<<"Llega aqui";
     iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
     char* tipoUsuario = new char[iResult];
     strcpy(tipoUsuario, recvbuf);
@@ -130,7 +133,7 @@ int main (void){
 
 void clienteConectado(SOCKET ConnectSocket) {
     //1: El cliente se ha conectado!
-    char* mensaje = new char[MAX];
+    char* mensaje = new char[15];
     mensaje = "El cliente esta conectado";
     int iResult = send( ConnectSocket, mensaje, (int)strlen(mensaje), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -140,15 +143,15 @@ void clienteConectado(SOCKET ConnectSocket) {
     }
 }
 
-void inicioSesion_dni(int iResult, SOCKET ConnectSocket){
+void inicioSesion_dni( SOCKET ConnectSocket){
 
     cout << "INICIO DE SESION"<<endl;
 
     //PIDE Y MANDA DNI
     cout << "DNI: ";
-    char* usuario = new char[MAX];
+    char* usuario = new char[15];
     cin >> usuario;
-    iResult = send( ConnectSocket, usuario, (int)strlen(usuario), 0 );
+    int iResult = send( ConnectSocket, usuario, (int)strlen(usuario), 0 );
     if (iResult == SOCKET_ERROR) {
         wprintf(L"send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
@@ -156,15 +159,14 @@ void inicioSesion_dni(int iResult, SOCKET ConnectSocket){
     }
     cout <<usuario;
     cout <<endl;
-
 }
 
-void inicioSesion_contra(int iResult, SOCKET ConnectSocket){
+void inicioSesion_contra( SOCKET ConnectSocket){
     cout<<"Contrasenya: ";
-    char* contrasenya = new char[MAX];
+    char* contrasenya = new char[15];
     cin>>contrasenya;
 
-    iResult = send( ConnectSocket, contrasenya, (int)strlen(contrasenya), 0 );
+    int iResult = send( ConnectSocket, contrasenya, (int)strlen(contrasenya), 0 );
     if (iResult == SOCKET_ERROR) {
         wprintf(L"send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
@@ -172,17 +174,18 @@ void inicioSesion_contra(int iResult, SOCKET ConnectSocket){
     }
     cout <<contrasenya;
     cout <<endl;
+    
 }
 
 void menuSaldo(SOCKET ConnectSocket){
     char recvbuf[DEFAULT_BUFLEN];
     int recvbuflen = DEFAULT_BUFLEN;
-    //RECIBIR NOMBRE
+    //RECIBIR MENSAJE
     int iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-    char* nombre = new char[iResult];
-    strcpy(nombre, recvbuf);
-    nombre[iResult] = '\0';
-    cout<<nombre <<nombre<<endl;
+    char* mensaje = new char[iResult];
+    strcpy(mensaje, recvbuf);
+    mensaje[iResult] = '\0';
+    cout<<mensaje<<endl;
 
     //RECIBIR SALDO
     iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
@@ -196,19 +199,17 @@ void menuSaldo(SOCKET ConnectSocket){
     char* respuesta = new char[MAX];
     cin>>respuesta;
     iResult = send( ConnectSocket, respuesta, (int)strlen(respuesta), 0 );
-
-    delete[] recvbuf;
     
 }
 
 void menuTransferencia(SOCKET ConnectSocket){
-    char recvbuf[DEFAULT_BUFLEN];
+    char recvbuf[DEFAULT_BUFLEN] = "";
     int recvbuflen = DEFAULT_BUFLEN;
     int iResult;
 
     //INSERTAR CUENTA DESTINO
     cout << "Cuenta destino: ";
-    char* cuentaDes = new char[MAX];
+    char* cuentaDes = new char[15];
     cin >> cuentaDes;
     iResult = send( ConnectSocket, cuentaDes, (int)strlen(cuentaDes), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -221,7 +222,7 @@ void menuTransferencia(SOCKET ConnectSocket){
 
     //INSERTAR IMPORTE
     cout << "Importe: ";
-    char* importe = new char[MAX];
+    char* importe = new char[15];
     cin >> importe;
     iResult = send( ConnectSocket, importe, (int)strlen(importe), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -234,7 +235,7 @@ void menuTransferencia(SOCKET ConnectSocket){
     
     //INSERTAR DESCRIPCION
     cout << "Descripcion: ";
-    char* descripcion = new char[MAX];
+    char* descripcion = new char[15];
     cin >> descripcion;
     iResult = send( ConnectSocket, descripcion, (int)strlen(descripcion), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -246,8 +247,7 @@ void menuTransferencia(SOCKET ConnectSocket){
     cout <<endl;
 
     cout <<"La transaccion se ha hecho correctamente."<<endl;
-
-    delete[] recvbuf;
+    
 }
 
 void menuAdmin(SOCKET ConnectSocket){
@@ -264,7 +264,7 @@ void menuAdmin(SOCKET ConnectSocket){
     cout<<"a) Crear cliente "<<endl;
     cout<<"b) Estadisticas" <<endl;
 
-    char* opcion = new char[MAX];
+    char* opcion = new char[15];
     cin >> opcion;
     iResult = send( ConnectSocket, opcion, (int)strlen(opcion), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -273,8 +273,6 @@ void menuAdmin(SOCKET ConnectSocket){
         WSACleanup();
     }
     cout <<endl;
-
-     delete[] recvbuf;
     
 }
 
@@ -283,7 +281,7 @@ void crearCliente(SOCKET ConnectSocket){
     int iResult;
     cout << "CREAR CLIENTE" <<endl;
     cout << "DNI: ";
-    char* dni = new char[MAX];
+    char* dni = new char[15];
     cin >> dni;
     iResult = send( ConnectSocket, dni, (int)strlen(dni), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -294,7 +292,7 @@ void crearCliente(SOCKET ConnectSocket){
     cout <<endl;
 
     cout << "NOMBRE: ";
-    char* nombre = new char[MAX];
+    char* nombre = new char[15];
     cin >> nombre;
     iResult = send( ConnectSocket, nombre, (int)strlen(nombre), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -305,7 +303,7 @@ void crearCliente(SOCKET ConnectSocket){
     cout <<endl;
 
     cout << "Fecha nacimiento: ";
-    char* fec_nac = new char[MAX];
+    char* fec_nac = new char[15];
     cin >> fec_nac;
     iResult = send( ConnectSocket, fec_nac, (int)strlen(fec_nac), 0 );
     if (iResult == SOCKET_ERROR) {
@@ -316,7 +314,7 @@ void crearCliente(SOCKET ConnectSocket){
     cout <<endl;
 
     cout << "Sexo: ";
-    char* sexo = new char[MAX];
+    char* sexo = new char[15];
     cin >> sexo;
     iResult = send( ConnectSocket, sexo, (int)strlen(sexo), 0 );
     if (iResult == SOCKET_ERROR) {

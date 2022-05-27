@@ -62,10 +62,12 @@ int __cdecl main(void)
     char* recvbuf3 = new char[DEFAULT_BUFLEN];
 
 
+
     char* f_pathBD = new char[DEF];
     f_pathBD = leerFicheroConf("../ficheros/path_bbdd.txt");
     //int result_bd = sqlite3_open(f_pathBD, &db);
     //int result_bd = sqlite3_open("bbdd.sqlite", &db);
+
 
     
     // Initialize Winsock
@@ -93,6 +95,7 @@ int __cdecl main(void)
         WSACleanup();
         return 1;
     }
+   
 
     // Create a SOCKET for connecting to server
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
@@ -160,14 +163,15 @@ int __cdecl main(void)
         CuentaCorriente** cuentas = listaCC(db);
         Cliente* cliente = cogerCliente(listaCliente, dni, db);
         //4.1: IDENTIFICAR TIPO DE USUARIO
+        char* sendbuf1 = new char[15];
         if (inicio == -1) {
-            sendbuf = "-1";
+            sendbuf1 = "-1\0";
         } else if (inicio == 1) {
-            sendbuf = "1";
+            sendbuf1 = "1\0";
         } else {
-            sendbuf = "0";
+            sendbuf1 = "0\0";
         }
-        iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+        iSendResult = send( ClientSocket, sendbuf1, (int)strlen(sendbuf1), 0 );
         
         //MENUS
         if(inicio == -1){
@@ -264,15 +268,21 @@ int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen ){
 
 //3. FUNCION RECIBIR CONTRASENYA
 int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
-        int contrasenya_num;
-        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        char* contrasenya = new char[iResult];
-        strcpy(contrasenya, recvbuf);
-        contrasenya[iResult] = '\0'; 
-        printf("Contrasenya recibida: %s\n", contrasenya);
-
-        contrasenya_num = (int)contrasenya;
-        return contrasenya_num;
+    cout << "Estoy en recibir";
+    
+    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+    cout << "Estoy en recibir1";
+    //char* cont = new char[15];
+    cout << "Estoy en recibir2";
+    //strcpy(cont, recvbuf);
+     cout << "Estoy en recibir3";
+    //contrasenya[iResult] = '\0'; 
+     cout << "Estoy en recibir4";
+    //printf("Contrasenya recibida: %s\n", contrasenya);
+    cout << "Esto en mitad ";
+    int contrasenya_num = 1111;
+    //contrasenya_num = (int)contrasenya;
+    return contrasenya_num;
 }
 
 //4. COMPROBAR DNI Y CONTRASEÑA
@@ -342,6 +352,7 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente* cuenta, Cliente* cliente) {
         //No hace transaccion, se sale
         cout<<"El cliente ha salido"<<endl;
     } 
+
 }
 
  //RECIBIR CCDESTINO
@@ -365,6 +376,7 @@ int recibirImporte(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
         imp[iResult] = '\0';
         printf("Importe recibido: %s\n", imp);
         importe = (int)imp;
+
     return importe;
 }
 
