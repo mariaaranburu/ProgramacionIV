@@ -160,7 +160,7 @@ void menuSaldo(SOCKET ConnectSocket){
     char* nombre = new char[iResult];
     strcpy(nombre, recvbuf);
     nombre[iResult] = '\0';
-    cout<<"Hola" <<nombre<<endl;
+    cout<<nombre <<nombre<<endl;
 
     //RECIBIR SALDO
     iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
@@ -169,12 +169,13 @@ void menuSaldo(SOCKET ConnectSocket){
     saldo[iResult] = '\0';
     cout<<"Saldo: "<<saldo<<endl;
 
-    //
+    //ENTRAR TRANSFERENCIA
     cout << "Quieres hacer una transferencia? " <<endl;
     char* respuesta = new char[MAX];
     cin>>respuesta;
     iResult = send( ConnectSocket, respuesta, (int)strlen(respuesta), 0 );
 
+    
 }
 
 void menuTransferencia(SOCKET ConnectSocket){
