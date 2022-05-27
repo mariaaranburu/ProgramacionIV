@@ -48,7 +48,7 @@ int main (void){
     if (ConnectSocket == INVALID_SOCKET) {
         wprintf(L"socket failed with error: %ld\n", WSAGetLastError());
         WSACleanup();
-        return 1;
+        return 1; 
     }
 
     //----------------------
@@ -72,8 +72,6 @@ int main (void){
     inicioSesion_contra(iResult,ConnectSocket);
     menuSaldo(ConnectSocket);
 
-    
-
     // Receive until the peer closes the connection
     /*do {
 
@@ -86,7 +84,6 @@ int main (void){
             wprintf(L"recv failed with error: %d\n", WSAGetLastError());
 
     } while( iResult > 0 );*/
-
 
 
     // shutdown the connection since no more data will be sent

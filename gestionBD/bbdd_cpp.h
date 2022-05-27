@@ -7,11 +7,7 @@
 
 int cuantosUsuarios(sqlite3 *db);
 
-<<<<<<< HEAD
 Usuario** listaUsuariosf(sqlite3* db);
-=======
-Usuario** listaUsuarios(sqlite3* db);
->>>>>>> d2d70c494431e15c16c79bd05c447df48fa6b033
 
 int cuantasCC(sqlite3* db);
 
