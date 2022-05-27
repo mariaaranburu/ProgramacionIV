@@ -32,8 +32,7 @@ class Transaccion
 		CuentaCorriente* getDestino() const;
 
 		void imprimirTransaccion(Transaccion t);
-		
-void Transaccion::hacerTransaccion(CuentaCorriente o, CuentaCorriente d, float importe);
+		void hacerTransaccion(CuentaCorriente o, CuentaCorriente d, float importe);
 };
 
 #endif

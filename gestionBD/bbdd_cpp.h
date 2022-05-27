@@ -5,7 +5,10 @@
 #include "sqlite3.h"
 #include "../c++/cliente_.h"
 #include "../c++/cuentacorriente_.h"
-//#include "../c++/transaccion.h"
+#include "../c++/administrador_.h"
+#include "../c++/transaccion_.h"
+
+Cliente* cogerCliente(int dni);
 
 int cuantosUsuarios(sqlite3 *db);
 
@@ -17,7 +20,11 @@ CuentaCorriente** listaCC(sqlite3* db);
 
 int cuantasTransacciones(sqlite3* db);
 
-//Transaccion** listaTransacciones(sqlite3* db);
+Transaccion** listaTransacciones(sqlite3* db);
+
+Administrador** deUsuariosAAdmin(Usuario** usuarios, int numUsuarios);
+
+Cliente** deUsuariosAClientes(Usuario** usuarios, int numUsuarios);
 
 
 #endif

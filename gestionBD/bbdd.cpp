@@ -7,18 +7,25 @@
 #include "../c++/usuario_.h"
 #include "../c++/cliente_.h"
 #include "../c++/administrador_.h"
-
+#include "../c++/cuentacorriente_.h"
+#include "bbdd_cpp.h"
 using namespace std;
 
-int cuantosUsuarios(sqlite3 *db);
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+   return dynamic_cast<const Base*>(ptr) != nullptr;
+}
 
-Usuario** listaUsuariosf(sqlite3* db);
-
-int cuantasCC(sqlite3* db);
-
-//CuentaCorriente** listaCC(sqlite3* db);
-
-int cuantasTransacciones(sqlite3* db);
+Cliente* cogerCliente(Cliente** lista, int dni, sqlite3* db)
+{
+    Cliente* cliente = new Cliente();
+    for (int i; i<cuantosUsuarios(db); i++){
+        if ((lista[i]->getDni())==dni){
+            cliente = lista[i];
+        }
+    }
+    return cliente;
+}
 
 int cuantosUsuarios(sqlite3* db){
     sqlite3_stmt *stmt;
@@ -40,8 +47,8 @@ int cuantosUsuarios(sqlite3* db){
 
     result = sqlite3_finalize(stmt);
     if(result != SQLITE_OK){
-        cout<<"Error finalizando la consulta."<<endl;
-        cout<<(sqlite3_errmsg(db))<<endl;
+        cout <<"Error finalizando la consulta."<<endl;
+        cout <<(sqlite3_errmsg(db))<<endl;
         return result;
     }
     return numFilas;
@@ -66,7 +73,7 @@ Usuario** listaUsuariosf(sqlite3* db)
     do {
         result = sqlite3_step(stmt);
         if (result == SQLITE_ROW) {
-            if (sqlite3_column_int(stmt, 0)==0000) {
+            if (sqlite3_column_int(stmt, 0)==1111) {
                 int tamNombre = strlen((char*)sqlite3_column_text(stmt, 1));
                 char* nombre = new char[tamNombre+1];
                 nombre = (char*)sqlite3_column_text(stmt, 1);
@@ -136,16 +143,75 @@ int cuantasCC(sqlite3* db)
     return numFilas;
 }
 
-//CuentaCorriente** listaCC(sqlite3* db)
+CuentaCorriente** listaCC(sqlite3* db)
+{
+    sqlite3_stmt* stmt;
+    char sql[] = "select * from CUENTA_CORRIENTE";
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error preparing statement (SELECT)"<<endl;
+        cout<<sqlite3_errmsg16(db);
+    }
+
+    int numFilas = cuantasCC(db);
+
+    CuentaCorriente** lista = new CuentaCorriente*[numFilas];
+    int contador = 0;
+
+    do {
+        result = sqlite3_step(stmt);
+        if (result == SQLITE_ROW) {
+            int numero = sqlite3_column_int(stmt, 0);
+            float saldo = sqlite3_column_double(stmt, 1);
+            int dni = sqlite3_column_int(stmt, 3);
+
+            CuentaCorriente* cuenta = new CuentaCorriente(numero, saldo, cogerCliente(deUsuariosAClientes(listaUsuariosf(db), cuantosUsuarios(db)), dni, db));
+            lista[contador] = cuenta;
+            contador++;
+        }
+    } while (result == SQLITE_ROW);
+
+    result = sqlite3_finalize(stmt);
+    if (result != SQLITE_OK){
+        cout<<"Error finalizing statement (SELECT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+    }
+    return l ista;
+}
 
 int cuantasTransacciones(sqlite3* db)
 {
 
 }
 
-//Transaccion** listaTransacciones(sqlite3* db)
-//{
+Transaccion** listaTransacciones(sqlite3* db)
+{
 
-//}
+}
+
+Cliente** deUsuariosAClientes(Usuario** usuarios, int numUsuarios){
+    Cliente** clientes = new Cliente*[numUsuarios];
+    int contClientes = 0;
+
+    for(int i=0; i<numUsuarios; i++){
+        if(instanceof<Cliente>(usuarios[i])){
+            clientes[contClientes] = (Cliente*)usuarios[i];
+        }
+    }
+    return clientes;
+}
+
+Administrador** deUsuariosAAdmin(Usuario** usuarios, int numUsuarios){
+    Administrador** admin = new Administrador*[numUsuarios];
+    int contAdmin = 0;
+
+    for(int i=0; i<numUsuarios; i++){
+        if(instanceof<Cliente>(usuarios[i])){
+            admin[contAdmin] = (Administrador*)usuarios[i];
+        }
+    }
+    return admin;
+}
 
 
