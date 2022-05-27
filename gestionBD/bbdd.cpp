@@ -400,7 +400,7 @@ int insertarTarjeta(sqlite3* db, int num, int pin, int limite, char* tipo, int n
 
     result = sqlite3_step(stmt);
     if(result != SQLITE_DONE){
-        cout<<"Error inserting new data into CLIENTE table"<<endl;
+        cout<<"Error inserting new data into TRANSACCION table"<<endl;
         return 0;
     }
 
@@ -472,7 +472,7 @@ int insertarTransaccion(sqlite3* db, int num, float importe, char* descripcion, 
 
     result = sqlite3_step(stmt);
     if(result != SQLITE_DONE){
-        cout<<"Error inserting new data into CLIENTE table"<<endl;
+        cout<<"Error inserting new data into TRANSACCION table"<<endl;
         return 0;
     }
 
