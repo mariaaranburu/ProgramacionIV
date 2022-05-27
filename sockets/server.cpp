@@ -15,6 +15,7 @@
 #include "../c++/cuentacorriente.h"
 #include "../gestionBD/bbdd.h"
 #include "../gestionBD/sqlite3.h"
+#include "../c++/administrador.h"
 using namespace std;
 
 // Need to link with Ws2_32.lib
@@ -144,9 +145,18 @@ int __cdecl main(void)
         int contra = recibirContrasenya(ClientSocket, recvbuf3, recvbuflen);
 
         //COMPROBAR DNI Y CONTRASENYA CORRECTOS
+        int inicio;
+        //inicio = funcioComp.
+        if(inicio == -1){
+
+        }else if(inicio == 0){
+
+        }else if(inicio==1){
+
+        }
        
         //2 Enviar opciones menu
-        /*Cliente* cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
+        /*Cliente *cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
         CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);*/
         //metodo polimorfico
         
@@ -332,11 +342,64 @@ int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
         return contrasenya_num;
 }
 
-int comprobarInicioSesion(){
+//4. COMPROBAR DNI Y CONTRASEÑA
+int comprobarInicioSesion(int dni, int contrasenya){
+    //Coger todos los usuarios
+    //ir pasando cual coincide
+    //si admin devolver -1 si cliente dev. 1 y no entra dev. 0
     
 }
 
-//4. COMPROBAR DNI Y CONTRASEÑA
+//5. MENU SALDO
+int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta) {
+    char* sendbuf = new char[DEFAULT_BUFLEN];
+    sendbuf =  cuenta->getCliente()->diHola();
+    int iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
+    if (iSendResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ClientSocket);
+        WSACleanup();
+        return 1;
+    }
+    char* sendbuf1 = new char[DEFAULT_BUFLEN];
+    sendbuf1 = cuenta->getSaldo();
+    iSendResult = send( ClientSocket, sendbuf1, (int)strlen(sendbuf1), 0 );
+    if (iSendResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ClientSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    //3 Recibir opcion
+    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+    char* newText = new char[iResult];
+    if (iResult>0) {
+        strcpy(newText, recvbuf);
+        newText[iResult] = '\0';
+        printf("Opcion recibida: %s", newText);
+    }
+
+    //si no funciona probar con strcmp(strg1, strg2)==0
+    if(newText=="s" || newText=="S") {
+        iResult = recv(ClientSocket, recvbuf5, recvbuflen, 0);
+        if (iResult>0) {
+            char* descripcion = new char[iResult];
+            strcpy(descripcion, recvbuf5);
+            descripcion[iResult] = '\0';
+            printf("Descripcion recibida: %s", descripcion);
+        }
+    } else if (newText=="n" || newText=="N") {
+        //NO HACE TRANSFERENCIA
+        printf("De acuerdo, no haremos la transferencia");
+
+    }else{
+        //ERROR, LAS LETRAS TIENEN QUE SER S O N
+        printf("Error, las letras tienen que ser s o n, se procede a la salida\n");
+    }
+            
+}
+
 
 
 
