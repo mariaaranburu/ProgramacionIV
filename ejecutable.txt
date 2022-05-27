@@ -6,4 +6,6 @@ g++ client.cpp -lws2_32 -o client.exe
 
 client.exe localhost
 
-g++ c++/cliente.cpp c++/usuario.cpp c++/administrador.cpp gestionBD/bbdd.cpp gestionBD/sqlite3.o gestionBD/main.cpp -o main.exe
+g++ ../c++/cliente.cpp ../c++/cuentacorriente.cpp ../c++/administrador.cpp ../gestionBD/bbdd.cpp ../gestionBD/sqlite3.o server.cpp ../c++/usuario.cpp ../c++/transaccion.cpp -lws2_32 -o server.exe
+
+g++ ../c++/cliente.cpp ../c++/cuentacorriente.cpp ../c++/administrador.cpp ../gestionBD/bbdd.cpp ../gestionBD/sqlite3.o menu_cliente.cpp ../c++/usuario.cpp ../c++/transaccion.cpp -lws2_32 -o cliente.exe
