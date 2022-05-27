@@ -37,7 +37,7 @@ int cuantosUsuarios(sqlite3* db)
     return numFilas;
 }
 
-Usuario** devolverUsu(sqlite3* db)
+Usuario** listaUsuariosf(sqlite3* db)
 {
     sqlite3_stmt* stmt;
     char sql[] = "select * from CLIENTE";

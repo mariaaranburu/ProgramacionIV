@@ -112,7 +112,7 @@ int main (void){
 void clienteConectado(SOCKET ConnectSocket) {
     //1: El cliente se ha conectado!
     char* mensaje = new char[MAX];
-    mensaje = "El cliente está conectado";
+    mensaje = "El cliente esta conectado";
     int iResult = send( ConnectSocket, mensaje, (int)strlen(mensaje), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());

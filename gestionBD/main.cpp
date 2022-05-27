@@ -7,6 +7,8 @@
 #include "../c++/cliente.h"
 #include "../c++/cuentacorriente.h"
 
+using namespace std;
+
 int main(void)
 {
     sqlite3 *db;
@@ -18,4 +20,4 @@ int main(void)
     //Cliente* clientes = (Cliente*)malloc(MAX_CLIENTES*sizeof(Cliente));
     //clientes = cogerClientes(db);
 
-}
+};

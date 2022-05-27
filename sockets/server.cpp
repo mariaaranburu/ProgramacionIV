@@ -21,7 +21,7 @@ using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 // #pragma comment (lib, "Mswsock.lib")
 
-#define DEFAULT_BUFLEN 1024
+#define DEFAULT_BUFLEN 502
 #define DEF 100
 #define DEFAULT_PORT "27015"
 
@@ -138,18 +138,19 @@ int __cdecl main(void)
         compruebaClienteConnect(ClientSocket, recvbuf, recvbuflen);
 
         //2: FUNCION RECIBIR DNI
-        recibirDNI(ClientSocket, recvbuf, recvbuflen);
+        int dni = recibirDNI(ClientSocket, recvbuf2, recvbuflen);
 
         //3: FUNCION RECIBIR CONTRASENYA
-        recibirContrasenya(ClientSocket, recvbuf, recvbuflen);
+        int contra = recibirContrasenya(ClientSocket, recvbuf3, recvbuflen);
 
         //COMPROBAR DNI Y CONTRASENYA CORRECTOS
        
         //2 Enviar opciones menu
-        //Cliente* cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
-        //CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);
+        /*Cliente* cliente = new Cliente(1234, "Cliente", "01/01/2001", 'f', "1234");
+        CuentaCorriente *cuenta = new CuentaCorriente(1, 200.00, cliente);*/
         //metodo polimorfico
-        sendbuf = "¡Hola %s! \n Tu saldo es: %i\n ¿Quieres hacer alguna transferencia? s/n\n  'q' para salir\n\0", "Malen", 200000;
+        
+        sendbuf = "Hola %s! \n Tu saldo es: %i\n Quieres hacer alguna transferencia? s/n\n  'q' para salir\n\0", "Malen", 200000;
         iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
             if (iSendResult == SOCKET_ERROR) {
                 printf("send failed with error: %d\n", WSAGetLastError());
@@ -268,7 +269,6 @@ int __cdecl main(void)
     return 0;
 }
 
-
 char* leerFicheroConf (string fichero){
     char* c = new char[DEF];
     int i = 0;
@@ -294,6 +294,7 @@ char* leerFicheroConf (string fichero){
     return c;
 }
 
+//1. EL CLIENTE SE HA CONECTADO
 void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
     int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
@@ -304,25 +305,38 @@ void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen)
         }
 }
 
-//1.1. Recibir DNI
+//2. Recibir DNI
 int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen ){
-    int correcto;
+    int dni_num;
         int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         char* dni = new char[iResult];
         strcpy(dni, recvbuf);
         dni[iResult] = '\0';
         printf("DNI recibido: %s\n", dni);
-        return correcto;
+        dni_num = (int)dni;
+    return dni_num;
 }
 
 
-//1.2. FUNCION RECIBIR CONTRASENYA
+//3. FUNCION RECIBIR CONTRASENYA
 int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
-        int correcto;
+        int contrasenya_num;
         int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         char* contrasenya = new char[iResult];
         strcpy(contrasenya, recvbuf);
         contrasenya[iResult] = '\0'; 
         printf("Contrasenya recibida: %s\n", contrasenya);
-        return correcto;
+
+        contrasenya_num = (int)contrasenya;
+
+        return contrasenya_num;
 }
+
+int comprobarInicioSesion(){
+    
+}
+
+//4. COMPROBAR DNI Y CONTRASEÑA
+
+
+
