@@ -352,6 +352,7 @@ int comprobarInicioSesion(int dni, int contrasenya){
 
 //5. MENU SALDO
 int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta) {
+    //ENVIAR HOLA
     char* sendbuf = new char[DEFAULT_BUFLEN];
     sendbuf =  cuenta->getCliente()->diHola();
     int iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
@@ -361,6 +362,7 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta) {
         WSACleanup();
         return 1;
     }
+    //ENVIAR SALDO
     char* sendbuf1 = new char[DEFAULT_BUFLEN];
     sendbuf1 = cuenta->getSaldo();
     iSendResult = send( ClientSocket, sendbuf1, (int)strlen(sendbuf1), 0 );

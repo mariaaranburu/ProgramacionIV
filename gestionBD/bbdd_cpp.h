@@ -1,12 +1,11 @@
 #ifndef _BBDD_CPP_H_
 #define _BBDD_CPP_H_
 #pragma once
-#include "sqlite3.h"
 #include "../c++/usuario_.h"
+#include "sqlite3.h"
 #include "../c++/cliente_.h"
 #include "../c++/cuentacorriente_.h"
 //#include "../c++/transaccion.h"
-#include "sqlite3.h"
 
 int cuantosUsuarios(sqlite3 *db);
 

@@ -1,17 +1,26 @@
-#include "bbdd_cpp.h"
+
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include "sqlite3.h"
 #include "../c++/usuario_.h"
 #include "../c++/cliente_.h"
 #include "../c++/administrador_.h"
-#include "sqlite3.h"
 
 using namespace std;
 
-int cuantosUsuarios(sqlite3* db)
-{
+int cuantosUsuarios(sqlite3 *db);
+
+Usuario** listaUsuariosf(sqlite3* db);
+
+int cuantasCC(sqlite3* db);
+
+//CuentaCorriente** listaCC(sqlite3* db);
+
+int cuantasTransacciones(sqlite3* db);
+
+int cuantosUsuarios(sqlite3* db){
     sqlite3_stmt *stmt;
     char sql[] = "select * from CLIENTE";
     int result = sqlite3_prepare_v2(db,sql,strlen(sql)+1,&stmt,NULL);
@@ -66,6 +75,8 @@ Usuario** listaUsuariosf(sqlite3* db)
                 contrasenya = (char*)sqlite3_column_text(stmt, 4);
 
                 Administrador* admin = new Administrador(nombre, contrasenya);
+                lista[contador] = admin;
+                contador++;
             } else {
                 int dni = sqlite3_column_int(stmt, 0);
                 int tamNombre = strlen((char*)sqlite3_column_text(stmt, 1));
@@ -83,6 +94,8 @@ Usuario** listaUsuariosf(sqlite3* db)
                 contrasenya = (char*)sqlite3_column_text(stmt, 4);
 
                 Cliente* cliente = new Cliente(dni, nombre, fec_nac, sexo, contrasenya);
+                lista[contador] = cliente;
+                contador++;
             }
         }
     } while (result == SQLITE_ROW);
@@ -123,10 +136,7 @@ int cuantasCC(sqlite3* db)
     return numFilas;
 }
 
-CuentaCorriente** listaCC(sqlite3* db)
-{
-
-}
+//CuentaCorriente** listaCC(sqlite3* db)
 
 int cuantasTransacciones(sqlite3* db)
 {
