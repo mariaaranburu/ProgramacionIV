@@ -10,12 +10,13 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <string.h>
 //#include "../c++/usuario.h"
-#include "../c++/cliente.h"
-#include "../c++/cuentacorriente.h"
-#include "../gestionBD/bbdd.h"
+#include "../c++/cliente_.h"
+#include "../c++/cuentacorriente_.h"
+#include "../gestionBD/bbdd_cpp.h"
 #include "../gestionBD/sqlite3.h"
-#include "../c++/administrador.h"
+#include "../c++/administrador_.h"
 using namespace std;
 
 // Need to link with Ws2_32.lib
@@ -25,6 +26,11 @@ using namespace std;
 #define DEFAULT_BUFLEN 502
 #define DEF 100
 #define DEFAULT_PORT "27015"
+
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+   return dynamic_cast<const Base*>(ptr) != nullptr;
+}
 
 char* leerFicheroConf (string fichero);
 
@@ -132,6 +138,9 @@ int __cdecl main(void)
 
     // No longer need server socket
     closesocket(ListenSocket);
+    sqlite3 *db;
+    int result = sqlite3_open("bbdd.sqlite", &db);
+    Cliente* cliente = new Cliente;
 
     // Receive until the peer shuts down the connection
     do {
@@ -150,7 +159,8 @@ int __cdecl main(void)
         if(inicio == -1){
 
         }else if(inicio == 0){
-
+            cout<<"Las datos introducidos no son correctos. Hasta pronto!";
+            //SALIR
         }else if(inicio==1){
 
         }
@@ -343,16 +353,28 @@ int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
 }
 
 //4. COMPROBAR DNI Y CONTRASEÑA
-int comprobarInicioSesion(int dni, int contrasenya){
-    //Coger todos los usuarios
-    //ir pasando cual coincide
-    //si admin devolver -1 si cliente dev. 1 y no entra dev. 0
-    
+int comprobarInicioSesion(int dni, int contrasenya,Cliente** lista, sqlite3* db){
+    int dev = 0;
+    if(dni==1111){
+        //Administrador* admin = new Administrador();
+        //admin = cogerAdmin(dni);
+        //if(admin->getContrasenya() == contrasenya){
+        /*    dev = -1;
+        }*/
+    }else{
+        Cliente* cliente = new Cliente();
+        //Faltan argumentos
+        cliente = cogerCliente( dni);
+        if((int)cliente->getContrasenya() == contrasenya){
+            dev = 1; 
+        }
+
+    }
+    return dev;
 }
 
 //5. MENU SALDO
-int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta) {
-    //ENVIAR HOLA
+int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta, Cliente* cliente) {
     char* sendbuf = new char[DEFAULT_BUFLEN];
     sendbuf =  cuenta->getCliente()->diHola();
     int iSendResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
@@ -363,41 +385,31 @@ int menuSaldo(SOCKET ClientSocket, CuentaCorriente *cuenta) {
         return 1;
     }
     //ENVIAR SALDO
+    
     char* sendbuf1 = new char[DEFAULT_BUFLEN];
-    sendbuf1 = cuenta->getSaldo();
+    sprintf(sendbuf1, "%f",cuenta->getSaldo());
     iSendResult = send( ClientSocket, sendbuf1, (int)strlen(sendbuf1), 0 );
     if (iSendResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        cout<<"send failed with error: "<<WSAGetLastError()<<endl;
         closesocket(ClientSocket);
         WSACleanup();
         return 1;
     }
 
     //3 Recibir opcion
-    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-    char* newText = new char[iResult];
+    char* recvbuf = new char[DEFAULT_BUFLEN];
+    int iResult = recv(ClientSocket, recvbuf, DEFAULT_BUFLEN, 0);
+    char* opcionRec = new char[iResult];
     if (iResult>0) {
-        strcpy(newText, recvbuf);
-        newText[iResult] = '\0';
-        printf("Opcion recibida: %s", newText);
+        strcpy(opcionRec, recvbuf);
+        opcionRec[iResult] = '\0';
+        printf("Opcion recibida: %s", opcionRec);
     }
-
-    //si no funciona probar con strcmp(strg1, strg2)==0
-    if(newText=="s" || newText=="S") {
-        iResult = recv(ClientSocket, recvbuf5, recvbuflen, 0);
-        if (iResult>0) {
-            char* descripcion = new char[iResult];
-            strcpy(descripcion, recvbuf5);
-            descripcion[iResult] = '\0';
-            printf("Descripcion recibida: %s", descripcion);
-        }
-    } else if (newText=="n" || newText=="N") {
-        //NO HACE TRANSFERENCIA
-        printf("De acuerdo, no haremos la transferencia");
-
+    int res = strcmp(opcionRec,"s\0" );
+    if(res = 0){
+        //ENTRA MENU TRANSFERENCIAS
     }else{
-        //ERROR, LAS LETRAS TIENEN QUE SER S O N
-        printf("Error, las letras tienen que ser s o n, se procede a la salida\n");
+        //sale
     }
             
 }
