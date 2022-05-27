@@ -1,6 +1,13 @@
 #include "cuentacorriente_.h"
 #include "cliente_.h"
-//namespace ?
+
+CuentaCorriente::CuentaCorriente()
+{
+	this->numero = 0;
+	this->saldo = 0;
+	this->cliente = 0;
+
+}
 
 CuentaCorriente:: CuentaCorriente(int numero, float saldo, Cliente *cliente)
 {

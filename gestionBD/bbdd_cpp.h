@@ -8,7 +8,7 @@
 #include "../c++/administrador_.h"
 #include "../c++/transaccion_.h"
 
-Cliente* cogerCliente(int dni);
+Cliente* cogerCliente(Cliente** lista, int dni, sqlite3* db);
 
 int cuantosUsuarios(sqlite3 *db);
 

@@ -45,16 +45,24 @@ int main(void)
         }
     }
 
-    cout<<admins[0]->getNombre();
+    cout<<admins[0]->getNombre()<<endl;
 
     int numCuentas = cuantasCC(db);
     CuentaCorriente** cuentas = new CuentaCorriente*[numCuentas];
     cuentas = listaCC(db);
     
-    cout<<cuentas[2]->getSaldo();
+    cout<<cuentas[2]->getSaldo()<<endl;
 
-    int insertar;
-    insertar = insertarCliente(db, 88768995, "Maria", "31/07/2001", "F", "merymaria");
+    int numTransacciones = cuantasTransacciones(db);
+    Transaccion** lista = new Transaccion*[numTransacciones];
+    lista = listaTransacciones(db);
+
+    cout<<numTransacciones;
+
+
+
+    //int insertar;
+    //insertar = insertarCliente(db, 88768995, "Maria", "31/07/2001", "F", "merymaria");
     
     /*Cliente* cliente = new Cliente(); 
     cliente = (Cliente*)usuarios[0];
