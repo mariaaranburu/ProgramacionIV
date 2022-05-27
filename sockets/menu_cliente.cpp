@@ -17,6 +17,10 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT 27015
 
+void clienteConectado(SOCKET ConnectSocket);
+void inicioSesion_dni(int iResult, SOCKET ConnectSocket);
+void inicioSesion_contra(int iResult, SOCKET ConnectSocket);
+
 using namespace std;
 
 int main (void){
@@ -63,8 +67,12 @@ int main (void){
         WSACleanup();
         return 1;
     }
-    inicioSesion(iResult,ConnectSocket);
+    clienteConectado(ConnectSocket);
+    inicioSesion_dni(iResult,ConnectSocket);
+    inicioSesion_contra(iResult,ConnectSocket);
     menuSaldo(ConnectSocket);
+
+    
 
     // Receive until the peer closes the connection
     /*do {
@@ -80,6 +88,15 @@ int main (void){
     } while( iResult > 0 );*/
 
 
+
+    // shutdown the connection since no more data will be sent
+    iResult = shutdown(ConnectSocket, SD_SEND);
+    if (iResult == SOCKET_ERROR) {
+        wprintf(L"shutdown failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+    }
+
     // close the socket
     iResult = closesocket(ConnectSocket);
     if (iResult == SOCKET_ERROR) {
@@ -92,7 +109,19 @@ int main (void){
     return 0;
 }
 
-void inicioSesion(int iResult, SOCKET ConnectSocket){
+void clienteConectado(SOCKET ConnectSocket) {
+    //1: El cliente se ha conectado!
+    char* mensaje = new char[MAX];
+    mensaje = "El cliente está conectado";
+    int iResult = send( ConnectSocket, mensaje, (int)strlen(mensaje), 0 );
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+    }
+}
+
+void inicioSesion_dni(int iResult, SOCKET ConnectSocket){
 
     cout << "INICIO DE SESION"<<endl;
 
@@ -109,7 +138,9 @@ void inicioSesion(int iResult, SOCKET ConnectSocket){
     cout <<usuario;
     cout <<endl;
 
-    //PIDE Y MANDA CONTRASENYA
+}
+
+void inicioSesion_contra(int iResult, SOCKET ConnectSocket){
     cout<<"Contrasenya: ";
     char* contrasenya = new char[MAX];
     cin>>contrasenya;
@@ -122,14 +153,6 @@ void inicioSesion(int iResult, SOCKET ConnectSocket){
     }
     cout <<contrasenya;
     cout <<endl;
-
-    // shutdown the connection since no more data will be sent
-    iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        wprintf(L"shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-    }
 }
 
 void menuSaldo(SOCKET ConnectSocket){

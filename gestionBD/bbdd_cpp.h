@@ -7,7 +7,7 @@
 
 int cuantosUsuarios(sqlite3 *db);
 
-Usuario** listaUsuario(sqlite3* db);
+Usuario** devolverUsu(sqlite3* db);
 
 int cuantasCC(sqlite3* db);
 

@@ -27,10 +27,7 @@ using namespace std;
 
 char* leerFicheroConf (string fichero);
 
-void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen);
-int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen );
-int recibirContrasenya(SOCKET ClientSocket, char* recvbuf, int recvbuflen );
-
+//void limpiarBuffer(char* buffer, int bufferLen);
 
 int __cdecl main(void) 
 {
@@ -68,7 +65,7 @@ int __cdecl main(void)
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
-        cout<<"WSAStartup failed with error: "<<iResult<<endl;
+        printf("WSAStartup failed with error: %d\n", iResult);
         return 1;
     }
 
@@ -134,15 +131,37 @@ int __cdecl main(void)
 
     // Receive until the peer shuts down the connection
     do {
-        //1: FUNCION CLIENTE SE HA CONECTADO
-        compruebaClienteConnect(ClientSocket, recvbuf, recvbuflen);
+        //1: El cliente se ha conectado!
+        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+        if (iResult > 0) {
+            char* newText = new char[iResult];
+            strcpy(newText, recvbuf);
+            newText[iResult] = '\0';
+            printf("%s\n", newText);
 
-        //2: FUNCION RECIBIR DNI
-        recibirDNI(ClientSocket, recvbuf, recvbuflen);
+        // Echo the buffer back to the sender
+        //1.1. Recibir DNI
+        char* mensaje = "Introduce DNI sin letra: \n";
+        iSendResult = send(ClientSocket, mensaje, (int)strlen(mensaje), 0);
 
-        //3: FUNCION RECIBIR CONTRASENYA
-        recibirContrasenya(ClientSocket, recvbuf, recvbuflen);
+        iResult = recv(ClientSocket, recvbuf1, recvbuflen, 0);
+        char* dni = new char[iResult];
+        strcpy(dni, recvbuf1);
+        newText[iResult] = '\0';
+        //limpiarBuffer(recvbuf, recvbuflen);
+        printf("DNI recibido: %s\n", dni);
 
+        //1.2. Recibir contrasenya
+        char* mensaje2 = "Introduce tu contrasenya: \n";
+        iSendResult = send(ClientSocket, mensaje2, (int)strlen(mensaje2), 0);
+
+        iResult = recv(ClientSocket, recvbuf2, recvbuflen, 0);
+        char* contrasenya = new char[iResult];
+        strcpy(contrasenya, recvbuf2);
+        newText[iResult] = '\0';
+        //limpiarBuffer(recvbuf, recvbuflen);
+        printf("Contrasenya recibida: %s\n", contrasenya);
+        
         //COMPROBAR DNI Y CONTRASENYA CORRECTOS
        
         //2 Enviar opciones menu
@@ -162,11 +181,12 @@ int __cdecl main(void)
 
             //3 Recibir opcion
             iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-            char* newText = new char[iResult];
             if (iResult>0) {
+                char* newText = new char[iResult];
                 strcpy(newText, recvbuf);
                 newText[iResult] = '\0';
                 printf("Opcion recibida: %s", newText);
+                //limpiarBuffer(recvbuf, recvbuflen);
             }
 
             //si no funciona probar con strcmp(strg1, strg2)==0
@@ -236,6 +256,9 @@ int __cdecl main(void)
                 printf("Error, las letras tienen que ser s o n, se procede a la salida\n");
             }
             
+            
+
+
             //printf("%s", recvbuf);
             //iSendResult = send(ClientSocket, recvbuf, iResult, 0);
             
@@ -247,10 +270,9 @@ int __cdecl main(void)
             WSACleanup();
             return 1;
         }
-    
-        else if (iResult == 0) {
-            printf("Connection closing...\n");
         }
+        else if (iResult == 0)
+            printf("Connection closing...\n");
         else  {
             printf("recv failed with error: %d\n", WSAGetLastError());
             closesocket(ClientSocket);
@@ -261,13 +283,13 @@ int __cdecl main(void)
     } while (iResult > 0);
 
     
+
     // cleanup
     closesocket(ClientSocket);
     WSACleanup();
 
     return 0;
 }
-
 
 char* leerFicheroConf (string fichero){
     char* c = new char[DEF];
@@ -292,37 +314,4 @@ char* leerFicheroConf (string fichero){
 	}
 	my_file.close();
     return c;
-}
-
-void compruebaClienteConnect(SOCKET ClientSocket, char* recvbuf, int recvbuflen){
-    int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0) {
-            char* newText = new char[iResult];
-            strcpy(newText, recvbuf);
-            newText[iResult] = '\0';
-            printf("%s\n", newText);
-        }
-}
-
-//1.1. Recibir DNI
-int recibirDNI(SOCKET ClientSocket, char* recvbuf, int recvbuflen ){
-    int correcto;
-        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        char* dni = new char[iResult];
-        strcpy(dni, recvbuf);
-        dni[iResult] = '\0';
-        printf("DNI recibido: %s\n", dni);
-        return correcto;
-}
-
-
-//1.2. FUNCION RECIBIR CONTRASENYA
-int recibirContrasenya (SOCKET ClientSocket, char* recvbuf, int recvbuflen){
-        int correcto;
-        int iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        char* contrasenya = new char[iResult];
-        strcpy(contrasenya, recvbuf);
-        contrasenya[iResult] = '\0'; 
-        printf("Contrasenya recibida: %s\n", contrasenya);
-        return correcto;
 }
