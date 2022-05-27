@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "bbdd_cpp.h"
 #include "../c++/usuario_.h"
 #include "../c++/cliente_.h"
 #include "../c++/administrador_.h"
@@ -52,6 +52,9 @@ int main(void)
     cuentas = listaCC(db);
     
     cout<<cuentas[2]->getSaldo();
+
+    int insertar;
+    insertar = insertarCliente(db, 88768995, "Maria", "31/07/2001", "F", "merymaria");
     
     /*Cliente* cliente = new Cliente(); 
     cliente = (Cliente*)usuarios[0];

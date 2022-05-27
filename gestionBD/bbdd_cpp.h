@@ -22,6 +22,8 @@ int cuantasTransacciones(sqlite3* db);
 
 Transaccion** listaTransacciones(sqlite3* db);
 
+int insertarCliente(sqlite3* db, int dni, char* nombre, char* fec_nac, char* sexo, char* contrasenya);
+
 Administrador** deUsuariosAAdmin(Usuario** usuarios, int numUsuarios);
 
 Cliente** deUsuariosAClientes(Usuario** usuarios, int numUsuarios);

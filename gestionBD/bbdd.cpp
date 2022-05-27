@@ -177,7 +177,7 @@ CuentaCorriente** listaCC(sqlite3* db)
         cout<<"Error finalizing statement (SELECT)"<<endl;
         cout<<sqlite3_errmsg(db);
     }
-    return l ista;
+    return lista;
 }
 
 int cuantasTransacciones(sqlite3* db)
@@ -188,6 +188,78 @@ int cuantasTransacciones(sqlite3* db)
 Transaccion** listaTransacciones(sqlite3* db)
 {
 
+}
+
+int insertarCliente(sqlite3* db, int dni, char* nombre, char* fec_nac, char* sexo, char* contrasenya)
+{
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO CLIENTE (dni, nombre, fec_nac, sexo, contrasenya) values (?,?,?,?,?)";
+
+    int result = sqlite3_prepare_v2(db, sql, strlen(sql)+1, &stmt, NULL);
+    if (result != SQLITE_OK){
+        cout<<"Error preparing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    cout<<"SQL query prepared (INSERT)"<<endl;
+
+    result = sqlite3_bind_int(stmt, 1, dni);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters1"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters2"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 3, fec_nac, strlen(fec_nac), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters3"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 4, sexo, strlen(sexo), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters4"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 5, contrasenya, strlen(contrasenya), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters5"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_step(stmt);
+    if(result != SQLITE_DONE){
+        cout<<"Error inserting new data into CLIENTE table"<<endl;
+        return 0;
+    }
+
+    result = sqlite3_finalize(stmt);
+    if(result != SQLITE_OK){
+        cout<<"Error finalizing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0; 
+    }
+
+    cout<<"Prepared statement finalized (INSERT)"<<endl;
+
+    return 1;
 }
 
 Cliente** deUsuariosAClientes(Usuario** usuarios, int numUsuarios){
