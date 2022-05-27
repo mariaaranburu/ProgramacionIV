@@ -55,14 +55,14 @@ int main(void)
 
     int numTransacciones = cuantasTransacciones(db);
     Transaccion** lista = new Transaccion*[numTransacciones];
-    lista = listaTransacciones(db);
+    //lista = listaTransacciones(db);
 
-    cout<<numTransacciones;
+    cout<<"El numero de transacciones son: "<<numTransacciones;
 
 
 
-    //int insertar;
-    //insertar = insertarCliente(db, 88768995, "Maria", "31/07/2001", "F", "merymaria");
+    int insertar;
+    insertar = insertarTarjeta(db, 444333234, 7684, 1000, "VISA", 1);
     
     /*Cliente* cliente = new Cliente(); 
     cliente = (Cliente*)usuarios[0];

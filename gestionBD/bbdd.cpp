@@ -247,18 +247,18 @@ Transaccion** listaTransacciones(sqlite3* db)
     Transaccion** lista = new Transaccion*[numFilas];
     int contador = 0;
 
-    do{
+    do {
         result = sqlite3_step(stmt);
-        if(result == SQLITE_ROW) {
-            int numero = sqlite3_column_int(stmt, 0);
-            float importe = sqlite3_column_double(stmt, 1);
+        if (result == SQLITE_ROW) {
+            int num = sqlite3_column_int(stmt, 0);
+            float saldo = sqlite3_column_double(stmt, 1);
             int tamDescripcion = strlen((char*)sqlite3_column_text(stmt, 2));
             char* descripcion = new char[tamDescripcion+1];
-            descripcion = (char*)sqlite3_column_text(stmt, 3);
-            int destino = sqlite3_column_int(stmt, 4);
-            int origen = sqlite3_column_int(stmt, 5);
+            descripcion = (char*)sqlite3_column_text(stmt, 2);
+            int destino = sqlite3_column_int(stmt, 3);
+            int origen = sqlite3_column_int(stmt, 4);
 
-            Transaccion* transaccion = new Transaccion(numero, importe, descripcion, cogerCC(listaCC(db), origen, db), cogerCC(listaCC(db), destino, db));
+            Transaccion* transaccion = new Transaccion(num, saldo, descripcion, cogerCC(listaCC(db), origen, db), cogerCC(listaCC(db), destino, db));
             lista[contador] = transaccion;
             contador++;
         }
@@ -319,6 +319,150 @@ int insertarCliente(sqlite3* db, int dni, char* nombre, char* fec_nac, char* sex
     }
 
     result = sqlite3_bind_text(stmt, 5, contrasenya, strlen(contrasenya), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters5"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_step(stmt);
+    if(result != SQLITE_DONE){
+        cout<<"Error inserting new data into CLIENTE table"<<endl;
+        return 0;
+    }
+
+    result = sqlite3_finalize(stmt);
+    if(result != SQLITE_OK){
+        cout<<"Error finalizing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0; 
+    }
+
+    cout<<"Prepared statement finalized (INSERT)"<<endl;
+
+    return 1;
+}
+
+int insertarTarjeta(sqlite3* db, int num, int pin, int limite, char* tipo, int numCC)
+{
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO TARJETA (num, pin, limite, tipo, num_CC) values (?,?,?,?,?)";
+
+    int result = sqlite3_prepare_v2(db, sql, strlen(sql)+1, &stmt, NULL);
+    if (result != SQLITE_OK){
+        cout<<"Error preparing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    cout<<"SQL query prepared (INSERT)"<<endl;
+
+    result = sqlite3_bind_int(stmt, 1, num);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters1"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_int(stmt, 2, pin);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters2"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_int(stmt, 3, limite);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters3"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 4, tipo, strlen(tipo), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters4"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_int(stmt, 5, numCC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters5"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_step(stmt);
+    if(result != SQLITE_DONE){
+        cout<<"Error inserting new data into CLIENTE table"<<endl;
+        return 0;
+    }
+
+    result = sqlite3_finalize(stmt);
+    if(result != SQLITE_OK){
+        cout<<"Error finalizing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0; 
+    }
+
+    cout<<"Prepared statement finalized (INSERT)"<<endl;
+
+    return 1;
+}
+
+int insertarTransaccion(sqlite3* db, int num, float importe, char* descripcion, int numD, int numO)
+{
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO TRANSACCIONES (num, importe, desc, num_cc_d, num_cc_o) values (?,?,?,?,?)";
+
+    int result = sqlite3_prepare_v2(db, sql, strlen(sql)+1, &stmt, NULL);
+    if (result != SQLITE_OK){
+        cout<<"Error preparing statement (INSERT)"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    cout<<"SQL query prepared (INSERT)"<<endl;
+
+    result = sqlite3_bind_int(stmt, 1, num);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters1"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_double(stmt, 2, importe);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters2"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_text(stmt, 3, descripcion, strlen(descripcion), SQLITE_STATIC);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters3"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_int(stmt, 4, numD);
+    if(result != SQLITE_OK)
+    {
+        cout<<"Error binding parameters4"<<endl;
+        cout<<sqlite3_errmsg(db);
+        return 0;
+    }
+
+    result = sqlite3_bind_int(stmt, 5, numO);
     if(result != SQLITE_OK)
     {
         cout<<"Error binding parameters5"<<endl;
